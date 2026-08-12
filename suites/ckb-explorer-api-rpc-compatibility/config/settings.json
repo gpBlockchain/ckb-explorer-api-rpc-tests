@@ -1,0 +1,19 @@
+{
+  "baseline_url": "https://testnet-api-ckba.explorer.nervos.org/api",
+  "candidate_url": "https://testnet-api.explorer.nervos.org/api",
+  "fixture_rpc_url": "https://testnet.ckbapp.dev/",
+  "manifest_file": "endpoints.json",
+  "fixtures_file": "fixtures.example.json",
+  "report_file": "/tmp/ckb-api-compat-report.json",
+  "run_live": true,
+  "include_known_defects": true,
+  "allow_mutations": true,
+  "run_exports": true,
+  "strict_fixtures": true,
+  "fail_fast": false,
+  "print_responses": true,
+  "timeout_seconds": 60,
+  "transport_retries": 1,
+  "max_body_bytes": 50000000,
+  "max_report_body_chars": 200000
+}

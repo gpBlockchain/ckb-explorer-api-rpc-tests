@@ -1,0 +1,10 @@
+/source/*
+!/source/README.md
+!/source/ckb-explorer-api-rpc/
+/artifacts/
+.DS_Store
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+reports/

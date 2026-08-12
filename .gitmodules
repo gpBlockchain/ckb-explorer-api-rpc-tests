@@ -1,0 +1,4 @@
+[submodule "source/ckb-explorer-api-rpc"]
+	path = source/ckb-explorer-api-rpc
+	url = https://github.com/nervosnetwork/ckb-explorer.git
+	branch = develop

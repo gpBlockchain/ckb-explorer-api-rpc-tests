@@ -1,0 +1,1016 @@
+{
+  "comparison_defaults": {
+    "ignore_v1_jsonapi_resource_ids": true,
+    "ignore_local_numeric_ids": true
+  },
+  "variables": {},
+  "cases": {
+    "API-001": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-002": {
+      "enabled": true,
+      "query": {
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-003": {
+      "path_params": {
+        "id": "22000000"
+      }
+    },
+    "API-004": {
+      "path_params": {
+        "id": "0xc405230f8e345715022a919117c5e0e6b4004430235d0dfbaf0a0aae620a9e24"
+      },
+      "ignore_paths": [
+        "/data/*/attributes/create_timestamp"
+      ]
+    },
+    "API-005": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-006": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-007": {
+      "allow_mutation": true,
+      "body": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-008": {
+      "path_params": {
+        "id": "999999999999999999"
+      }
+    },
+    "API-009": {
+      "path_params": {
+        "id": "999999999999999999"
+      }
+    },
+    "API-010": {
+      "path_params": {
+        "id": "999999999999999999"
+      }
+    },
+    "API-011": {
+      "baseline_path_params": {
+        "id": "553433093"
+      },
+      "candidate_path_params": {
+        "id": "553433181"
+      }
+    },
+    "API-012": {
+      "baseline_path_params": {
+        "id": "553433093"
+      },
+      "candidate_path_params": {
+        "id": "553433181"
+      }
+    },
+    "API-013": {
+      "baseline_path_params": {
+        "id": "553433093"
+      },
+      "candidate_path_params": {
+        "id": "553433181"
+      }
+    },
+    "API-014": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-015": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-016": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-017": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-018": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-019": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-020": {
+      "allow_mutation": true,
+      "body": {
+        "transaction": {}
+      }
+    },
+    "API-022": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-023": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-024": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      },
+      "allow_mutation": true,
+      "body": {
+        "transaction": {}
+      }
+    },
+    "API-025": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      },
+      "allow_mutation": true,
+      "body": {
+        "transaction": {}
+      }
+    },
+    "API-026": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      },
+      "allow_mutation": true
+    },
+    "API-027": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-028": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-029": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-032": {
+      "query": {
+        "epoch_number": "0x697",
+        "epoch_index": 0
+      }
+    },
+    "API-033": {
+      "path_params": {
+        "id": "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-034": {
+      "path_params": {
+        "id": "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-035": {
+      "path_params": {
+        "id": "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      },
+      "ignore_paths": [
+        "/data/*/attributes/create_timestamp",
+        "/data/*/attributes/created_at"
+      ]
+    },
+    "API-036": {
+      "enabled": true,
+      "query": {
+        "id": "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk",
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-037": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-038": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      },
+      "set_paths": [
+        "/data"
+      ]
+    },
+    "API-039": {
+      "enabled": true,
+      "query": {
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-040": {
+      "path_params": {
+        "id": "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-041": {
+      "path_params": {
+        "id": "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-042": {
+      "path_params": {
+        "id": "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-043": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-044": {
+      "query": {
+        "q": "XTS2"
+      }
+    },
+    "API-045": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-046": {
+      "enabled": true,
+      "query": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d",
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-047": {
+      "path_params": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d"
+      }
+    },
+    "API-048": {
+      "path_params": {
+        "id": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "allow_mutation": true,
+      "body": {
+        "email": ""
+      }
+    },
+    "API-049": {
+      "path_params": {
+        "id": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "allow_mutation": true,
+      "body": {
+        "email": ""
+      }
+    },
+    "API-050": {
+      "path_params": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d"
+      }
+    },
+    "API-051": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-052": {
+      "enabled": true,
+      "query": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d",
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-053": {
+      "query": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d",
+        "number": "22000000",
+        "format": "json",
+        "merge_with_owner": "true"
+      }
+    },
+    "API-054": {
+      "path_params": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d"
+      }
+    },
+    "API-055": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-056": {
+      "enabled": true,
+      "query": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d",
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-057": {
+      "path_params": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d"
+      }
+    },
+    "API-058": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-059": {
+      "enabled": true,
+      "query": {
+        "id": "0xd79f827952e82d7c8324dcb6f246e85c50bd438ce0222f89a6d8b0323b94bfcd",
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-060": {
+      "path_params": {
+        "id": "0xd79f827952e82d7c8324dcb6f246e85c50bd438ce0222f89a6d8b0323b94bfcd"
+      }
+    },
+    "API-061": {
+      "path_params": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      },
+      "ignore_paths": [
+        "/data/*/attributes/create_timestamp",
+        "/data/*/attributes/created_at"
+      ]
+    },
+    "API-062": {
+      "path_params": {
+        "id": "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk"
+      },
+      "query": {
+        "type_hash": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d",
+        "page": 1,
+        "page_size": 2
+      },
+      "ignore_paths": [
+        "/data/*/attributes/create_timestamp",
+        "/data/*/attributes/created_at"
+      ]
+    },
+    "API-063": {
+      "path_params": {
+        "id": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "allow_mutation": true,
+      "body": {
+        "locale": "en"
+      }
+    },
+    "API-064": {
+      "path_params": {
+        "id": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "allow_mutation": true,
+      "body": {
+        "locale": "en"
+      }
+    },
+    "API-065": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-066": {
+      "path_params": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d"
+      }
+    },
+    "API-067": {
+      "allow_mutation": true,
+      "body": {
+        "addresses": [
+          "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk"
+        ]
+      }
+    },
+    "API-068": {
+      "allow_mutation": true,
+      "body": {
+        "txids": []
+      }
+    },
+    "API-069": {
+      "path_params": {
+        "id": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-070": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-071": {
+      "allow_mutation": true,
+      "body": {
+        "name": "compatibility-invalid"
+      }
+    },
+    "API-073": {
+      "path_params": {
+        "id": "0xa871b4c10cab213ff5f4f5528843174a9c42a040107f3d838f0be9906f5b4bbe"
+      }
+    },
+    "API-074": {
+      "path_params": {
+        "id": "0xa871b4c10cab213ff5f4f5528843174a9c42a040107f3d838f0be9906f5b4bbe"
+      }
+    },
+    "API-075": {
+      "path_params": {
+        "id": "0xa871b4c10cab213ff5f4f5528843174a9c42a040107f3d838f0be9906f5b4bbe"
+      },
+      "allow_mutation": true,
+      "body": {
+        "name": "compatibility-invalid"
+      }
+    },
+    "API-076": {
+      "path_params": {
+        "id": "0xa871b4c10cab213ff5f4f5528843174a9c42a040107f3d838f0be9906f5b4bbe"
+      },
+      "allow_mutation": true,
+      "body": {
+        "name": "compatibility-invalid"
+      }
+    },
+    "API-077": {
+      "path_params": {
+        "id": "0xa871b4c10cab213ff5f4f5528843174a9c42a040107f3d838f0be9906f5b4bbe"
+      },
+      "allow_mutation": true
+    },
+    "API-078": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-079": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-080": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-081": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c"
+      },
+      "allow_mutation": true,
+      "body": {
+        "name": "compatibility-invalid",
+        "token_id": "0"
+      }
+    },
+    "API-082": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c"
+      }
+    },
+    "API-083": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c",
+        "id": "0"
+      }
+    },
+    "API-084": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c",
+        "id": "0"
+      }
+    },
+    "API-085": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c",
+        "id": "0"
+      },
+      "allow_mutation": true,
+      "body": {
+        "name": "compatibility-invalid",
+        "token_id": "0"
+      }
+    },
+    "API-086": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c",
+        "id": "0"
+      },
+      "allow_mutation": true,
+      "body": {
+        "name": "compatibility-invalid",
+        "token_id": "0"
+      }
+    },
+    "API-087": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c",
+        "id": "0"
+      },
+      "allow_mutation": true
+    },
+    "API-088": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c",
+        "item_id": "0"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-089": {
+      "path_params": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c",
+        "item_id": "0",
+        "id": "488795"
+      },
+      "ignore_paths": [
+        "/item/created_at",
+        "/item/updated_at"
+      ]
+    },
+    "API-090": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-091": {
+      "path_params": {
+        "nft_class_id": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-092": {
+      "path_params": {
+        "nft_class_id": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "id": "0"
+      }
+    },
+    "API-093": {
+      "path_params": {
+        "nft_class_id": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "id": "0"
+      }
+    },
+    "API-094": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-095": {
+      "path_params": {
+        "id": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    "API-096": {
+      "path_params": {
+        "id": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    "API-097": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-098": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      },
+      "ignore_paths": [
+        "/data/*/item/created_at",
+        "/data/*/item/updated_at"
+      ]
+    },
+    "API-099": {
+      "enabled": true,
+      "query": {
+        "collection_id": "0xd8cee605ff0d8aef789f57818df936399effeb5bd4a2f01ffb0ce2e54b67df3c",
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-100": {
+      "path_params": {
+        "id": "488795"
+      },
+      "ignore_paths": [
+        "/item/created_at",
+        "/item/updated_at"
+      ]
+    },
+    "API-102": {
+      "path_params": {
+        "id": "tb1qfm9u0es2f5tr5mlpmsms5ljh0k7z39c0z0m5fp"
+      }
+    },
+    "API-103": {
+      "path_params": {
+        "id": "tb1qfm9u0es2f5tr5mlpmsms5ljh0k7z39c0z0m5fp"
+      },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-104": {
+      "path_params": {
+        "id": "tb1qfm9u0es2f5tr5mlpmsms5ljh0k7z39c0z0m5fp"
+      }
+    },
+    "API-105": {
+      "query": {
+        "code_hash": "0x61ca7a4796a4eb19ca4f0d065cb9b10ddcf002f10f7cbb810c706cb6bb5c3248",
+        "page": 1,
+        "page_size": 2
+      }
+    },
+  "API-106": {
+    "headers": {
+      "Accept": "application/json"
+    },
+    "query": {
+      "page": 1,
+      "page_size": 2
+      }
+    },
+    "API-108": {
+      "path_params": {
+        "id": "0x1e4ce190edbe9ccb0c11bffeb42dcedf26b072fc3a2fe0c903eff5d14d05cf4d"
+      }
+    },
+    "API-109": {
+      "path_params": {
+        "id": "nervos_dao"
+      },
+      "ignore_paths": [
+        "/data/*/attributes/create_timestamp",
+        "/data/*/attributes/created_at"
+      ]
+    },
+    "API-110": {
+      "enabled": true,
+      "query": {
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-111": {
+      "path_params": {
+        "id": "nervos_dao"
+      }
+    },
+    "API-112": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      },
+      "headers": {
+        "Accept": "application/json"
+      }
+    },
+    "API-113": {
+      "query": {
+        "hash_type": "data",
+        "code_hash": "0x709f3fda12f561cfacf92273c57a98fede188a3f1a59b1f888d113f9cce08649",
+        "page": 1,
+        "page_size": 2
+      },
+      "headers": {
+        "Accept": "application/json"
+      }
+    },
+    "API-114": {
+      "query": {
+        "hash_type": "data",
+        "code_hash": "0x709f3fda12f561cfacf92273c57a98fede188a3f1a59b1f888d113f9cce08649",
+        "page": 1,
+        "page_size": 2
+      },
+      "headers": {
+        "Accept": "application/json"
+      }
+    },
+    "API-115": {
+      "query": {
+        "hash_type": "data",
+        "code_hash": "0x709f3fda12f561cfacf92273c57a98fede188a3f1a59b1f888d113f9cce08649",
+        "page": 1,
+        "page_size": 2
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "ignore_paths": [
+        "/data/referring_cells/*/created_at",
+        "/data/referring_cells/*/updated_at"
+      ]
+    },
+    "API-116": {
+      "query": {
+        "hash_type": "data",
+        "code_hash": "0x709f3fda12f561cfacf92273c57a98fede188a3f1a59b1f888d113f9cce08649",
+        "page": 1,
+        "page_size": 2
+      },
+      "headers": {
+        "Accept": "application/json"
+      }
+    },
+    "API-117": {
+      "path_params": {
+        "id": "tip_block_number"
+      }
+    },
+    "API-118": {
+      "query": {
+        "q": "0xb100a84bcc4d1a4309cf0b3e017999d74977c748cc9a3d6a722cf19df89b5f34"
+      }
+    },
+    "API-119": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-120": {
+      "path_params": {
+        "id": "tip_block_number"
+      },
+      "ignore_paths": [
+        "/data/attributes/created_at_unixtimestamp"
+      ]
+    },
+    "API-121": {
+      "ignore_paths": [
+        "/data/attributes/local_node_info/node_id"
+      ]
+    },
+    "API-122": {
+      "path_params": {
+        "id": "local_node_info"
+      },
+      "ignore_paths": [
+        "/data/attributes/local_node_info/node_id"
+      ]
+    },
+    "API-124": {
+      "path_params": {
+        "id": "transactions_count"
+      }
+    },
+    "API-125": {
+      "path_params": {
+        "id": "difficulty"
+      }
+    },
+    "API-126": {
+      "path_params": {
+        "id": "difficulty"
+      },
+      "query": {
+        "limit": 2
+      }
+    },
+    "API-128": {
+      "path_params": {
+        "id": "total_supply"
+      }
+    },
+    "API-129": {
+      "path_params": {
+        "id": "average_block_time"
+      }
+    },
+    "API-130": {
+      "path_params": {
+        "id": "nominal_apc"
+      }
+    },
+    "API-132": {
+      "set_paths": [
+        "/last_n_days_transaction_fee_rates"
+      ]
+    },
+    "API-133": {
+      "set_paths": [
+        "/"
+      ]
+    },
+    "API-134": {
+      "allow_mutation": true,
+      "body": {
+        "address": "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk",
+        "message": "compatibility-invalid",
+        "signature": "0x00",
+        "pub_key": "0x00"
+      }
+    },
+    "API-135": {
+      "allow_mutation": true,
+      "body": {
+        "name": "compatibility-unauthenticated"
+      }
+    },
+    "API-136": {
+      "allow_mutation": true,
+      "body": {
+        "name": "compatibility-unauthenticated"
+      }
+    },
+    "API-137": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-138": {
+      "allow_mutation": true,
+      "body": {
+        "addresses": [
+          "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqd39cmf94qpcvcld503al9jf4gs99ky56sunhuuk"
+        ]
+      }
+    },
+    "API-139": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-140": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-141": {
+      "enabled": true,
+      "query": {
+        "start_number": "22000000",
+        "end_number": "22000000"
+      }
+    },
+    "API-142": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-143": {
+      "allow_mutation": true,
+      "body": {
+        "name": "compatibility-invalid",
+        "peer_id": "QmCompatibilityFixturePeer",
+        "rpc_listening_addr": "http://127.0.0.1:1"
+      }
+    },
+    "API-144": {
+      "path_params": {
+        "peer_id": "QmCompatibilityFixturePeer"
+      }
+    },
+    "API-145": {
+      "path_params": {
+        "channel_id": "0x1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    "API-146": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+  "API-148": {
+    "path_params": {
+      "node_id": "03cce3c4313d20577bf117901ddeb921fc51c69c1c41cfa16c3368202266f94e59"
+    }
+  },
+  "API-149": {
+    "path_params": {
+      "node_id": "03cce3c4313d20577bf117901ddeb921fc51c69c1c41cfa16c3368202266f94e59"
+    },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+  "API-150": {
+    "path_params": {
+      "node_id": "03cce3c4313d20577bf117901ddeb921fc51c69c1c41cfa16c3368202266f94e59"
+    },
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-151": {
+      "query": {
+        "page": 1,
+        "page_size": 2
+      }
+    },
+    "API-153": {
+      "path_params": {
+        "id": "total_nodes"
+      }
+    }
+  }
+}
