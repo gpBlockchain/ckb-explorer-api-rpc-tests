@@ -12,6 +12,8 @@ from ckb_rpc_correctness.ckb import (
     ckb2021_address,
     decode_epoch,
     decode_hex_int,
+    output_address,
+    output_occupied_capacity,
     parse_cellbase_message,
     parse_cellbase_lock,
     pending_base_reward,
@@ -106,7 +108,12 @@ class CkbDerivationTests(unittest.TestCase):
             "extension": None,
         }
         self.assertEqual(300, total_output_capacity(block))
+        self.assertEqual(61 * 100_000_000, output_occupied_capacity(transaction["outputs"][0], "0x"))
+        self.assertEqual(130 * 100_000_000, output_occupied_capacity(transaction["outputs"][1], "0x01020304"))
         self.assertEqual((61 + 130) * 100_000_000, total_cell_consumed(block))
+
+        self.assertTrue(output_address(transaction["outputs"][0], "ckb").startswith("ckb1"))
+        self.assertTrue(output_address(transaction["outputs"][0], "ckt").startswith("ckt1"))
 
         script_capacity = 53 + 20
         first_output_capacity = 24 + script_capacity

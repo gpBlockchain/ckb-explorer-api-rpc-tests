@@ -28,6 +28,9 @@ PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_index -v
 # GET /api/v1/blocks/:id RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_show -v
 
+# GET /api/v1/block_transactions/:block_hash RPC correctness against both public networks.
+PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_block_transactions_show -v
+
 # Review-to-automation mapping coverage.
 python3 ../../scripts/check_test_map.py --root ../..
 ```
@@ -37,3 +40,7 @@ blocks. Sample selection searches up to five recent 100-row list pages so that
 low-traffic testnet windows can still supply non-trivial transaction fixtures.
 When the selected height changes hash during an assertion, the affected network
 subtest is reported as skipped because the oracle observed a reorg.
+The block-transaction preview boundary needs a normal transaction with more
+than ten inputs or outputs; a network whose configured search window has no
+such transaction reports that case as unavailable instead of using a fixture
+that does not exercise the boundary.

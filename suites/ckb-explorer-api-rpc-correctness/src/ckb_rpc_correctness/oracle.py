@@ -59,6 +59,7 @@ class NetworkOracle:
         self._rpc_tip: Mapping[str, Any] | None = None
         self._blocks: dict[int, Mapping[str, Any]] = {}
         self._blocks_with_cycles: dict[int, Mapping[str, Any]] = {}
+        self._transactions: dict[str, Mapping[str, Any]] = {}
         self._details: dict[str, Mapping[str, Any]] = {}
         self._samples: dict[str, BlockSample] = {}
         self._economic_states: dict[str, Mapping[str, Any]] = {}
@@ -185,6 +186,45 @@ class NetworkOracle:
             self._blocks_with_cycles[height] = result
         return self._blocks_with_cycles[height]
 
+    def referenced_outputs(self, transaction: Mapping[str, Any]) -> list[tuple[Mapping[str, Any], object]]:
+        inputs = transaction.get("inputs")
+        if not isinstance(inputs, list):
+            raise OracleUnavailable(f"{self.network.name} RPC transaction inputs are invalid")
+        references: list[tuple[str, int]] = []
+        for index, item in enumerate(inputs):
+            previous = item.get("previous_output") if isinstance(item, dict) else None
+            tx_hash = previous.get("tx_hash") if isinstance(previous, dict) else None
+            raw_index = previous.get("index") if isinstance(previous, dict) else None
+            if not isinstance(tx_hash, str):
+                raise OracleUnavailable(f"{self.network.name} RPC input {index} has no previous transaction hash")
+            try:
+                output_index = decode_hex_int(raw_index, f"inputs[{index}].previous_output.index")
+            except ValueError as error:
+                raise OracleUnavailable(f"{self.network.name} RPC input {index} has invalid output index: {error}") from error
+            references.append((tx_hash, output_index))
+        missing = list(dict.fromkeys(tx_hash for tx_hash, _index in references if tx_hash not in self._transactions))
+        for offset in range(0, len(missing), self.settings.rpc_batch_size):
+            batch = missing[offset : offset + self.settings.rpc_batch_size]
+            results = self.rpc_batch_results([("get_transaction", [tx_hash]) for tx_hash in batch])
+            for tx_hash, result in zip(batch, results, strict=True):
+                previous_transaction = result.get("transaction") if isinstance(result, dict) else None
+                if not isinstance(previous_transaction, dict):
+                    raise OracleUnavailable(f"{self.network.name} RPC has no transaction {tx_hash}")
+                self._transactions[tx_hash] = previous_transaction
+        resolved: list[tuple[Mapping[str, Any], object]] = []
+        for tx_hash, output_index in references:
+            previous_transaction = self._transactions[tx_hash]
+            outputs = previous_transaction.get("outputs")
+            outputs_data = previous_transaction.get("outputs_data")
+            if not isinstance(outputs, list) or not isinstance(outputs_data, list) or len(outputs) != len(outputs_data):
+                raise OracleUnavailable(f"{self.network.name} RPC previous transaction {tx_hash} outputs are invalid")
+            if output_index >= len(outputs) or not isinstance(outputs[output_index], dict):
+                raise OracleUnavailable(
+                    f"{self.network.name} RPC previous transaction {tx_hash} has no output {output_index}"
+                )
+            resolved.append((outputs[output_index], outputs_data[output_index]))
+        return resolved
+
     def prefetch_blocks(self, heights: list[int]) -> None:
         missing = [height for height in heights if height not in self._blocks]
         for offset in range(0, len(missing), self.settings.rpc_batch_size):
@@ -205,6 +245,28 @@ class NetworkOracle:
                 raise OracleUnavailable(f"{self.network.name} Explorer detail has no attributes for {identifier}")
             self._details[key] = attributes
         return self._details[key]
+
+    def block_transaction_page(
+        self,
+        block_hash: str,
+        **query: object,
+    ) -> tuple[list[Mapping[str, Any]], Mapping[str, Any]]:
+        params: dict[str, object] = {"page": 1, "page_size": self.settings.list_page_size}
+        params.update(query)
+        payload = self.explorer_json(f"/v1/block_transactions/{block_hash}", params)
+        data = payload.get("data") if isinstance(payload, dict) else None
+        meta = payload.get("meta") if isinstance(payload, dict) else None
+        if not isinstance(data, list) or not isinstance(meta, dict):
+            raise OracleUnavailable(f"{self.network.name} Explorer block transactions response is invalid")
+        rows: list[Mapping[str, Any]] = []
+        for index, row in enumerate(data):
+            attributes = row.get("attributes") if isinstance(row, dict) else None
+            if not isinstance(attributes, dict):
+                raise OracleUnavailable(
+                    f"{self.network.name} Explorer block transaction row {index} has no attributes"
+                )
+            rows.append(attributes)
+        return rows, meta
 
     def _eligible_rows(self) -> list[Mapping[str, Any]]:
         minimum_depth = self.settings.proposal_window + 1
@@ -261,8 +323,41 @@ class NetworkOracle:
             "transaction",
             lambda _attributes, block: isinstance(block.get("transactions"), list)
             and len(block["transactions"]) > 1,
-            priority=lambda attributes: (int(attributes.get("transactions_count", "0")) <= 1,),
+            priority=lambda attributes: (
+                int(attributes.get("transactions_count", "0")) <= 1,
+                int(attributes.get("transactions_count", "0")) > self.settings.list_page_size,
+                int(attributes.get("transactions_count", "0")),
+            ),
         )
+
+    def cellbase_only_sample(self) -> BlockSample:
+        return self._find_sample(
+            "cellbase-only",
+            lambda _attributes, block: isinstance(block.get("transactions"), list)
+            and len(block["transactions"]) == 1,
+            priority=lambda attributes: (int(attributes.get("transactions_count", "0")) != 1,),
+        )
+
+    def wide_transaction_sample(self) -> BlockSample:
+        rows = self._eligible_rows()
+        self.prefetch_blocks([int(attributes["number"]) for attributes in rows])
+
+        def has_wide_transaction(_attributes: Mapping[str, Any], block: Mapping[str, Any]) -> bool:
+            transactions = block.get("transactions")
+            if not isinstance(transactions, list):
+                return False
+            return any(
+                isinstance(transaction, dict)
+                and (
+                    isinstance(transaction.get("inputs"), list)
+                    and len(transaction["inputs"]) > 10
+                    or isinstance(transaction.get("outputs"), list)
+                    and len(transaction["outputs"]) > 10
+                )
+                for transaction in transactions[1:]
+            )
+
+        return self._find_sample("wide-transaction", has_wide_transaction)
 
     def live_change_sample(self) -> BlockSample:
         return self._find_sample(

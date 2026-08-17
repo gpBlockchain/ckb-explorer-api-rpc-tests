@@ -165,6 +165,18 @@ def ckb2021_address(lock: LockScript, hrp: str) -> str:
     return hrp + "1" + "".join(BECH32_CHARSET[value] for value in data + checksum)
 
 
+def output_address(output: Mapping[str, Any], hrp: str) -> str:
+    lock = output.get("lock")
+    if not isinstance(lock, dict):
+        raise ValueError("output.lock must be an object")
+    code_hash = lock.get("code_hash")
+    hash_type = lock.get("hash_type")
+    args = lock.get("args")
+    if not all(isinstance(value, str) for value in (code_hash, hash_type, args)):
+        raise ValueError("output.lock fields must be strings")
+    return ckb2021_address(LockScript(code_hash, hash_type, args), hrp)
+
+
 def derive_miner_address(block: Mapping[str, Any], hrp: str) -> str:
     witness = cellbase_witness(block)
     return ckb2021_address(parse_cellbase_lock(witness), hrp)
@@ -281,8 +293,16 @@ def total_output_capacity(block: Mapping[str, Any]) -> int:
     return total
 
 
+def output_occupied_capacity(output: Mapping[str, Any], data: object) -> int:
+    occupied = 8 + len(_hex_bytes(data, "output.data"))
+    occupied += _script_occupied_bytes(output.get("lock"), "output.lock")
+    if output.get("type") is not None:
+        occupied += _script_occupied_bytes(output["type"], "output.type")
+    return occupied * 100_000_000
+
+
 def total_cell_consumed(block: Mapping[str, Any]) -> int:
-    total_bytes = 0
+    total = 0
     for tx_index, transaction in enumerate(_transactions(block)):
         outputs = transaction.get("outputs")
         outputs_data = transaction.get("outputs_data")
@@ -291,12 +311,8 @@ def total_cell_consumed(block: Mapping[str, Any]) -> int:
         for output_index, (output, data) in enumerate(zip(outputs, outputs_data, strict=True)):
             if not isinstance(output, dict):
                 raise ValueError(f"transaction {tx_index} output {output_index} is invalid")
-            occupied = 8 + len(_hex_bytes(data, f"transactions[{tx_index}].outputs_data[{output_index}]"))
-            occupied += _script_occupied_bytes(output.get("lock"), f"transactions[{tx_index}].outputs[{output_index}].lock")
-            if output.get("type") is not None:
-                occupied += _script_occupied_bytes(output["type"], f"transactions[{tx_index}].outputs[{output_index}].type")
-            total_bytes += occupied
-    return total_bytes * 100_000_000
+            total += output_occupied_capacity(output, data)
+    return total
 
 
 def _transactions(block: Mapping[str, Any]) -> list[Mapping[str, Any]]:

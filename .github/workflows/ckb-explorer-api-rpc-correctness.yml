@@ -51,6 +51,7 @@ jobs:
           python -m unittest
           tests.chain_data.test_v1_blocks_index
           tests.chain_data.test_v1_blocks_show
+          tests.chain_data.test_v1_block_transactions_show
           -v
         working-directory: suites/ckb-explorer-api-rpc-correctness
         env:
