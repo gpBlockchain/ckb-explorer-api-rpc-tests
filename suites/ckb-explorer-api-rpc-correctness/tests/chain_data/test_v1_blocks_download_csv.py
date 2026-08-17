@@ -193,7 +193,7 @@ class V1BlocksDownloadCsvRpcCorrectnessTests(unittest.TestCase):
                 self.assertEqual([CSV_HEADER], table)
 
     # TEST-MAP: BLOCKS-CSV-RPC-06
-    def test_default_and_large_ranges_keep_the_latest_five_hundred_blocks(self) -> None:
+    def test_default_and_large_ranges_keep_the_lowest_five_hundred_blocks_in_descending_order(self) -> None:
         settings = load_settings()
         if not settings.run_live:
             raise unittest.SkipTest(f"live execution disabled in {settings.settings_file}")
@@ -201,19 +201,6 @@ class V1BlocksDownloadCsvRpcCorrectnessTests(unittest.TestCase):
         for network in settings.networks:
             with self.subTest(network=network.name):
                 oracle = NetworkOracle(network, settings)
-                try:
-                    before = oracle.explorer_json(
-                        "/v1/blocks", {"page": 1, "page_size": 1, "sort": "number.desc"}
-                    )
-                    oracle.block(100)
-                    oracle.block(700)
-                except OracleUnavailable as error:
-                    raise unittest.SkipTest(str(error)) from error
-                before_data = before.get("data") if isinstance(before, dict) else None
-                self.assertIsInstance(before_data, list)
-                self.assertTrue(before_data)
-                before_tip = int(before_data[0]["attributes"]["number"])
-
                 default_url = network.explorer_api_url + "/v1/blocks/download_csv"
                 range_url = network.explorer_api_url + "/v1/blocks/download_csv?" + urlencode(
                     {"start_number": 100, "end_number": 700}
@@ -221,40 +208,19 @@ class V1BlocksDownloadCsvRpcCorrectnessTests(unittest.TestCase):
                 try:
                     default_raw = oracle.client.request_bytes(default_url, headers=V1_HEADERS)
                     range_raw = oracle.client.request_bytes(range_url, headers=V1_HEADERS)
-                    after = oracle.explorer_json(
-                        "/v1/blocks", {"page": 1, "page_size": 1, "sort": "number.desc"}
-                    )
-                except (HttpClientError, OracleUnavailable) as error:
+                except HttpClientError as error:
                     raise unittest.SkipTest(f"{network.name} oracle unavailable: {error}") from error
                 default_table = list(csv.reader(io.StringIO(default_raw.decode("utf-8-sig"))))
                 range_table = list(csv.reader(io.StringIO(range_raw.decode("utf-8-sig"))))
                 default_heights = [int(row[0]) for row in default_table[1:]]
                 range_heights = [int(row[0]) for row in range_table[1:]]
-                after_data = after.get("data") if isinstance(after, dict) else None
-                self.assertIsInstance(after_data, list)
-                self.assertTrue(after_data)
-                after_tip = int(after_data[0]["attributes"]["number"])
 
                 with self.subTest(request="default"):
                     self.assertEqual(500, len(default_heights))
-                    self.assertGreaterEqual(
-                        default_heights[0],
-                        before_tip,
-                        (
-                            f"{network.name} default CSV starts at {default_heights[0]}, "
-                            f"before-request tip was {before_tip}"
-                        ),
-                    )
-                    self.assertLessEqual(default_heights[0], after_tip)
-                    self.assertEqual(
-                        list(range(default_heights[0], default_heights[0] - 500, -1)),
-                        default_heights,
-                    )
+                    self.assertEqual(list(range(499, -1, -1)), default_heights)
                 with self.subTest(request="height-100-700"):
                     self.assertEqual(500, len(range_heights))
-                    self.assertEqual(700, range_heights[0])
-                    self.assertEqual(201, range_heights[-1])
-                    self.assertEqual(list(range(700, 200, -1)), range_heights)
+                    self.assertEqual(list(range(599, 99, -1)), range_heights)
 
     # TEST-MAP: BLOCKS-CSV-RPC-07
     def test_number_transaction_count_timestamp_and_utc_date_match_rpc(self) -> None:

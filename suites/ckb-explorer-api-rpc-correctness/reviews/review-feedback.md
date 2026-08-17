@@ -1,1 +1,2 @@
 - model: gpt-5.6 | cases: BLOCKS-RPC-02 | feedback: BLOCKS-RPC-02 :允许落后5个block 以内，其他没什么问题
+- model: gpt-5.6 | cases: BLOCKS-CSV-RPC-06 | feedback: 那调整用例评审，并调整用例
