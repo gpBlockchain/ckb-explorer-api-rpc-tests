@@ -1,0 +1,23 @@
+{
+  "run_live": true,
+  "timeout_seconds": 30,
+  "transport_retries": 1,
+  "max_lag_blocks": 5,
+  "proposal_window": 10,
+  "list_page_size": 100,
+  "sample_search_pages": 5,
+  "networks": [
+    {
+      "name": "mainnet",
+      "explorer_api_url": "https://mainnet-api.explorer.nervos.org/api",
+      "ckb_rpc_url": "https://mainnet.ckbapp.dev/",
+      "address_hrp": "ckb"
+    },
+    {
+      "name": "testnet",
+      "explorer_api_url": "https://testnet-api.explorer.nervos.org/api",
+      "ckb_rpc_url": "https://testnet.ckbapp.dev/",
+      "address_hrp": "ckt"
+    }
+  ]
+}
