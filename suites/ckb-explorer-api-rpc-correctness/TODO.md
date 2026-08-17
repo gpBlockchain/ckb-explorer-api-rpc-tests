@@ -4,7 +4,7 @@
 - ACTIVE TODO：123
 - 路由审计 TODO：29
 
-## 同事 A：Chain Data（21）
+## gp：Chain Data（21）
 
 - [ ] `GET /api/v1/blocks/download_csv` — 导出区块 CSV
 - [ ] `GET /api/v1/blocks/:id` — 区块详情
@@ -28,7 +28,7 @@
 - [ ] `GET /api/v2/blocks/ckb_node_versions` — CKB 节点版本分布
 - [ ] `GET /api/v2/blocks/by_epoch` — 按 Epoch 查询区块
 
-## 同事 B：Address / DAO + Contract / Script（19）
+## scz：Address / DAO + Contract / Script（19）
 
 - [ ] `GET /api/v1/addresses/:id` — 地址详情
 - [ ] `GET /api/v1/address_dao_transactions/:id` — 地址 DAO 交易
@@ -50,7 +50,7 @@
 - [ ] `GET /api/v2/scripts/referring_cells` — 脚本引用 Cells
 - [ ] `GET /api/v2/scripts/general_info` — 脚本通用信息
 
-## 同事 C：Token / UDT（23）
+## xyl：Token / UDT（23）
 
 - [ ] `GET /api/v1/udt_queries` — UDT 搜索
 - [ ] `GET /api/v1/udts` — UDT 列表
@@ -76,7 +76,7 @@
 - [ ] `GET /api/v2/udt_hourly_statistics` — UDT 小时统计列表
 - [ ] `GET /api/v2/udt_hourly_statistics/:id` — UDT 小时统计详情
 
-## 同事 D：NFT / RGB / Bitcoin（23）
+## gp：NFT / RGB / Bitcoin（23）
 
 - [ ] `POST /api/v2/das_accounts` — DAS 账户查询
 - [ ] `POST /api/v2/bitcoin_transactions` — Bitcoin 交易查询
@@ -102,7 +102,7 @@
 - [ ] `GET /api/v2/rgb_assets_statistics` — RGB 资产统计
 - [ ] `GET /api/v2/rgb_top_holders/:id` — RGB Top Holders
 
-## 同事 E：Statistics / Discovery（17）
+## scz：Statistics / Discovery（17）
 
 - [ ] `GET /api/v1/external/stats/:id` — 外部统计详情
 - [ ] `GET /api/v1/suggest_queries` — 搜索建议
@@ -122,7 +122,7 @@
 - [ ] `GET /api/v2/statistics/transaction_fees` — 交易手续费统计
 - [ ] `GET /api/v2/statistics/contract_resource_distributed` — 合约资源分布
 
-## 同事 F：Portfolio + Fiber（20）
+## xyl：Portfolio + Fiber（20）
 
 - [ ] `POST /api/v2/portfolio/sessions` — 创建 Portfolio 会话
 - [ ] `PATCH /api/v2/portfolio/user` — 更新 Portfolio 用户
@@ -145,7 +145,7 @@
 - [ ] `GET /api/v2/fiber/statistics` — Fiber 统计列表
 - [ ] `GET /api/v2/fiber/statistics/:id` — Fiber 统计详情
 
-## 同事 G：路由审计（29）
+## gp：路由审计（29）
 
 - [ ] `GET /api/v2/ckb_transactions` — V2 交易列表 [ROUTE_ONLY]
 - [ ] `GET /api/v2/ckb_transactions/:id` — V2 交易详情 [ROUTE_ONLY]
