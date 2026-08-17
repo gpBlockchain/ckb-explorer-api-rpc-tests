@@ -1,13 +1,13 @@
 # CKB Explorer API RPC 正确性 TODO
 
 - 已完成：`GET /api/v1/blocks`
-- ACTIVE TODO：123
+- 已完成：`GET /api/v1/blocks/:id`
+- ACTIVE TODO：122
 - 路由审计 TODO：29
 
-## gp：Chain Data（21）
+## gp：Chain Data（20）
 
 - [ ] `GET /api/v1/blocks/download_csv` — 导出区块 CSV
-- [ ] `GET /api/v1/blocks/:id` — 区块详情
 - [ ] `GET /api/v1/block_transactions/:id` — 区块交易列表
 - [ ] `GET /api/v1/transactions` — 交易列表
 - [ ] `GET /api/v1/transactions/:id` — 交易详情

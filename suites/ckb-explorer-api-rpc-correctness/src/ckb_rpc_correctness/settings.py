@@ -28,6 +28,7 @@ class Settings:
     proposal_window: int
     list_page_size: int
     sample_search_pages: int
+    rpc_batch_size: int
     networks: tuple[NetworkSettings, ...]
 
 
@@ -73,6 +74,7 @@ def load_settings(
     proposal_window = int(payload.get("proposal_window", 10))
     page_size = int(payload.get("list_page_size", 100))
     search_pages = int(payload.get("sample_search_pages", 5))
+    rpc_batch_size = int(payload.get("rpc_batch_size", 100))
     if timeout_seconds <= 0:
         raise ValueError("timeout_seconds must be positive")
     if retries < 0 or max_lag < 0 or proposal_window < 0:
@@ -81,6 +83,8 @@ def load_settings(
         raise ValueError("list_page_size must be between 1 and 100")
     if not 1 <= search_pages <= 50:
         raise ValueError("sample_search_pages must be between 1 and 50")
+    if not 1 <= rpc_batch_size <= 200:
+        raise ValueError("rpc_batch_size must be between 1 and 200")
 
     return Settings(
         path,
@@ -91,5 +95,6 @@ def load_settings(
         proposal_window,
         page_size,
         search_pages,
+        rpc_batch_size,
         tuple(networks),
     )

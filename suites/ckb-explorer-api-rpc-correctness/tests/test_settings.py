@@ -10,6 +10,7 @@ class SettingsTests(unittest.TestCase):
         settings = load_settings(environ={})
         self.assertEqual(5, settings.max_lag_blocks)
         self.assertEqual(5, settings.sample_search_pages)
+        self.assertEqual(100, settings.rpc_batch_size)
         self.assertEqual(("mainnet", "testnet"), tuple(item.name for item in settings.networks))
         self.assertEqual(("ckb", "ckt"), tuple(item.address_hrp for item in settings.networks))
 

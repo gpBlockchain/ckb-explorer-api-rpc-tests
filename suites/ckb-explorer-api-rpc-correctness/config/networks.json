@@ -6,6 +6,7 @@
   "proposal_window": 10,
   "list_page_size": 100,
   "sample_search_pages": 5,
+  "rpc_batch_size": 100,
   "networks": [
     {
       "name": "mainnet",

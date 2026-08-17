@@ -25,6 +25,9 @@ PYTHONPATH=src python3 -m unittest tests.test_ckb tests.test_settings -v
 # GET /api/v1/blocks RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_index -v
 
+# GET /api/v1/blocks/:id RPC correctness against both public networks.
+PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_show -v
+
 # Review-to-automation mapping coverage.
 python3 ../../scripts/check_test_map.py --root ../..
 ```
