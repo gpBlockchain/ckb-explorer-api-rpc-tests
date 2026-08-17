@@ -9,6 +9,9 @@ description = "CKB Explorer API correctness checks against same-network CKB RPC"
 requires-python = ">=3.11"
 dependencies = []
 
+[project.scripts]
+ckb-api-todo = "ckb_rpc_correctness.todo:main"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 

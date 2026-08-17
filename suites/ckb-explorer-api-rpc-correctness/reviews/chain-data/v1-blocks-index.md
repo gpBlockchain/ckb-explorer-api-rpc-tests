@@ -1,5 +1,6 @@
 # V1 区块列表 RPC 正确性用例评审
 
+评审接口：`GET /api/v1/blocks`
 评审范围：在公开主网和测试网分别以同网络 CKB RPC 为事实基准，核对 `GET /api/v1/blocks` 返回区块的链身份、同步高度和六个列表字段
 源码版本：`develop@0495ecd00a839f7618bad752f5ad92071124a991`
 
