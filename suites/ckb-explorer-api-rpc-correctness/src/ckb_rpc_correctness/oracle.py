@@ -507,16 +507,36 @@ class NetworkOracle:
             return self._completed_epoch
         current = self.detail_attributes(self.api_tip_height())
         try:
-            previous_height = int(current["start_number"]) - 1
+            candidate_height = int(current["start_number"]) - 1
         except (KeyError, TypeError, ValueError) as error:
             raise OracleUnavailable(f"{self.network.name} current detail has invalid start_number") from error
-        previous = self.detail_attributes(previous_height)
-        try:
-            epoch = int(previous["epoch"])
-            start = int(previous["start_number"])
-            length = int(previous["length"])
-        except (KeyError, TypeError, ValueError) as error:
-            raise OracleUnavailable(f"{self.network.name} previous Epoch fields are invalid") from error
+
+        previous: Mapping[str, Any] | None = None
+        epoch = 0
+        start = 0
+        length = 0
+        for _candidate in range(5):
+            attributes = self.detail_attributes(candidate_height)
+            try:
+                epoch = int(attributes["epoch"])
+                start = int(attributes["start_number"])
+                length = int(attributes["length"])
+            except (KeyError, TypeError, ValueError) as error:
+                raise OracleUnavailable(
+                    f"{self.network.name} completed Epoch candidate fields are invalid"
+                ) from error
+            if (
+                attributes.get("largest_block_in_epoch") is not None
+                and attributes.get("max_cycles_in_epoch") is not None
+            ):
+                previous = attributes
+                break
+            candidate_height = start - 1
+        if previous is None:
+            raise OracleUnavailable(
+                f"{self.network.name} last 5 completed Epochs have no generated size/cycles statistics"
+            )
+
         heights = list(range(start, start + length))
         largest = 0
         maximum_cycles: int | None = None

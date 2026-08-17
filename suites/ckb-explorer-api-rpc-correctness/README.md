@@ -20,7 +20,7 @@ Environment overrides:
 
 ```bash
 # Deterministic unit tests.
-PYTHONPATH=src python3 -m unittest tests.test_ckb tests.test_settings -v
+PYTHONPATH=src python3 -m unittest tests.test_ckb tests.test_oracle tests.test_settings -v
 
 # GET /api/v1/blocks RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_index -v
