@@ -53,6 +53,7 @@ jobs:
           tests.chain_data.test_v1_blocks_show
           tests.chain_data.test_v1_blocks_download_csv
           tests.chain_data.test_v1_block_transactions_show
+          tests.chain_data.test_v1_transactions_index
           -v
         working-directory: suites/ckb-explorer-api-rpc-correctness
         env:

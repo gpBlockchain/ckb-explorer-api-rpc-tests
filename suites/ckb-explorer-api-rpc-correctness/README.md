@@ -34,6 +34,9 @@ PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_download_csv 
 # GET /api/v1/block_transactions/:block_hash RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_block_transactions_show -v
 
+# GET /api/v1/transactions RPC correctness against both public networks.
+PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_transactions_index -v
+
 # Review-to-automation mapping coverage.
 python3 ../../scripts/check_test_map.py --root ../..
 ```
@@ -50,3 +53,6 @@ that does not exercise the boundary.
 The block CSV contract keeps the latest 500 matching heights in descending
 order. A transport timeout on the public date-only export is reported as an
 unavailable live observation rather than a CSV value mismatch.
+The default transaction-list checks require a stable 15-row snapshot. A
+snapshot without the reviewed same-block, live-cell-change, or input-count
+fixtures reports only the affected network and case as unavailable.

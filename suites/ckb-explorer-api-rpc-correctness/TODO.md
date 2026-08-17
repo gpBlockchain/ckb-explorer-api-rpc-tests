@@ -4,14 +4,15 @@
 - 已完成：`GET /api/v1/blocks/:id`
 - 已完成：`GET /api/v1/blocks/download_csv`
 - 已完成：`GET /api/v1/block_transactions/:id`
-- ACTIVE TODO：120
+- 已完成：`GET /api/v1/transactions`
+- ACTIVE TODO：119
 - 路由审计 TODO：29
 
 ## gp：Chain Data（20）
 
 - [x] `GET /api/v1/blocks/download_csv` — 导出区块 CSV
 - [x] `GET /api/v1/block_transactions/:id` — 区块交易列表
-- [ ] `GET /api/v1/transactions` — 交易列表
+- [x] `GET /api/v1/transactions` — 交易列表
 - [ ] `GET /api/v1/transactions/:id` — 交易详情
 - [ ] `POST /api/v1/transactions/query` — 批量/条件查询交易
 - [ ] `GET /api/v1/cell_input_lock_scripts/:id` — 输入 Cell Lock Script
