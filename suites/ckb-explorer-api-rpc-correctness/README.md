@@ -37,6 +37,9 @@ PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_block_transactions_s
 # GET /api/v1/transactions RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_transactions_index -v
 
+# GET /api/v1/transactions/:id RPC correctness against both public networks.
+PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_transactions_show -v
+
 # Review-to-automation mapping coverage.
 python3 ../../scripts/check_test_map.py --root ../..
 ```
@@ -56,3 +59,6 @@ unavailable live observation rather than a CSV value mismatch.
 The default transaction-list checks require a stable 15-row snapshot. A
 snapshot without the reviewed same-block, live-cell-change, or input-count
 fixtures reports only the affected network and case as unavailable.
+Transaction-detail fixtures are deeply confirmed immutable transactions chosen
+to cover Header Dependencies, mixed Type Scripts, more than ten Cells, and
+Cellbase behavior without relying on a moving latest-list snapshot.
