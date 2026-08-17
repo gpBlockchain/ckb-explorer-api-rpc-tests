@@ -40,6 +40,9 @@ PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_transactions_index -
 # GET /api/v1/transactions/:id RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_transactions_show -v
 
+# POST /api/v1/transactions/query RPC correctness against both public networks.
+PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_transactions_query -v
+
 # Review-to-automation mapping coverage.
 python3 ../../scripts/check_test_map.py --root ../..
 ```
@@ -62,3 +65,8 @@ fixtures reports only the affected network and case as unavailable.
 Transaction-detail fixtures are deeply confirmed immutable transactions chosen
 to cover Header Dependencies, mixed Type Scripts, more than ten Cells, and
 Cellbase behavior without relying on a moving latest-list snapshot.
+Transaction-query fixtures use complete address histories for membership,
+ordering, pagination, and signed income checks, plus deeply confirmed mixed-Type
+and wide transactions for the two ten-Cell preview boundaries. The omitted-address
+case follows the controller's existing global-query branch and reports HTTP 500
+as a correctness failure.
