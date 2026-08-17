@@ -2,13 +2,14 @@
 
 - 已完成：`GET /api/v1/blocks`
 - 已完成：`GET /api/v1/blocks/:id`
-- ACTIVE TODO：122
+- 已完成：`GET /api/v1/block_transactions/:id`
+- ACTIVE TODO：121
 - 路由审计 TODO：29
 
 ## gp：Chain Data（20）
 
 - [ ] `GET /api/v1/blocks/download_csv` — 导出区块 CSV
-- [ ] `GET /api/v1/block_transactions/:id` — 区块交易列表
+- [x] `GET /api/v1/block_transactions/:id` — 区块交易列表
 - [ ] `GET /api/v1/transactions` — 交易列表
 - [ ] `GET /api/v1/transactions/:id` — 交易详情
 - [ ] `POST /api/v1/transactions/query` — 批量/条件查询交易
