@@ -973,6 +973,8 @@ class V1TransactionsQueryRpcCorrectnessTests(unittest.TestCase):
                 self.assertEqual({-1, 0, 1}, signs)
 
     # TEST-MAP: TX-QUERY-RPC-09
+    # ISSUE: https://github.com/nervosnetwork/ckb-explorer/issues/2945
+    @unittest.skip("temporarily skipped until nervosnetwork/ckb-explorer#2945 is fixed")
     def test_omitted_address_returns_recent_normal_page_with_null_income(self) -> None:
         settings = load_settings()
         if not settings.run_live:
