@@ -28,6 +28,9 @@ PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_index -v
 # GET /api/v1/blocks/:id RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_show -v
 
+# GET /api/v1/blocks/download_csv RPC correctness against both public networks.
+PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_download_csv -v
+
 # GET /api/v1/block_transactions/:block_hash RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_block_transactions_show -v
 
@@ -44,3 +47,6 @@ The block-transaction preview boundary needs a normal transaction with more
 than ten inputs or outputs; a network whose configured search window has no
 such transaction reports that case as unavailable instead of using a fixture
 that does not exercise the boundary.
+The block CSV contract keeps the latest 500 matching heights in descending
+order. A transport timeout on the public date-only export is reported as an
+unavailable live observation rather than a CSV value mismatch.
