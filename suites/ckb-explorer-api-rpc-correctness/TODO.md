@@ -1,17 +1,22 @@
 # CKB Explorer API RPC 正确性 TODO
 
 - 已完成：`GET /api/v1/blocks`
-- ACTIVE TODO：123
+- 已完成：`GET /api/v1/blocks/:id`
+- 已完成：`GET /api/v1/blocks/download_csv`
+- 已完成：`GET /api/v1/block_transactions/:id`
+- 已完成：`GET /api/v1/transactions`
+- 已完成：`GET /api/v1/transactions/:id`
+- 已完成：`POST /api/v1/transactions/query`
+- ACTIVE TODO：117
 - 路由审计 TODO：29
 
-## gp：Chain Data（21）
+## gp：Chain Data（20）
 
-- [ ] `GET /api/v1/blocks/download_csv` — 导出区块 CSV
-- [ ] `GET /api/v1/blocks/:id` — 区块详情
-- [ ] `GET /api/v1/block_transactions/:id` — 区块交易列表
-- [ ] `GET /api/v1/transactions` — 交易列表
-- [ ] `GET /api/v1/transactions/:id` — 交易详情
-- [ ] `POST /api/v1/transactions/query` — 批量/条件查询交易
+- [x] `GET /api/v1/blocks/download_csv` — 导出区块 CSV
+- [x] `GET /api/v1/block_transactions/:id` — 区块交易列表
+- [x] `GET /api/v1/transactions` — 交易列表
+- [x] `GET /api/v1/transactions/:id` — 交易详情
+- [x] `POST /api/v1/transactions/query` — 批量/条件查询交易
 - [ ] `GET /api/v1/cell_input_lock_scripts/:id` — 输入 Cell Lock Script
 - [ ] `GET /api/v1/cell_input_type_scripts/:id` — 输入 Cell Type Script
 - [ ] `GET /api/v1/cell_input_data/:id` — 输入 Cell Data

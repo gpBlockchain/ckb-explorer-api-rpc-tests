@@ -1,1 +1,5 @@
 - model: gpt-5.6 | cases: BLOCKS-RPC-02 | feedback: BLOCKS-RPC-02 :允许落后5个block 以内，其他没什么问题
+- model: gpt-5.6 | cases: BLOCKS-CSV-RPC-06 | feedback: 那调整用例评审，并调整用例
+- model: gpt-5.6 | cases: CELL-INPUT-LOCK-RPC-01,CELL-INPUT-LOCK-RPC-02,CELL-INPUT-LOCK-RPC-03 | feedback: 场景好像都是合法的场景，没有报错的场景
+- model: gpt-5.6 | cases: CELL-INPUT-LOCK-RPC-07,CELL-INPUT-LOCK-RPC-08 | feedback: 不用关注Header
+- model: gpt-5.6 | cases: CELL-INPUT-LOCK-RPC-04,CELL-INPUT-LOCK-RPC-05,CELL-INPUT-LOCK-RPC-06 | feedback: 那调整用例以实际返回为准

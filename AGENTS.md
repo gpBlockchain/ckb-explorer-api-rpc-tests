@@ -44,12 +44,20 @@ Before writing cases, internally consider core behavior, validation, state trans
 
 Existing unchanged reviewed rows remain eligible for implementation. Any new, deleted, or behavior-changing row reopens the review gate.
 
+## Automation Style
+
+- Prefer direct Arrange-Act-Assert tests whose scenario, action, and oracle can be understood in one pass.
+- Reuse existing fixtures and helpers when they remain transparent, but add abstractions only when they remove meaningful repetition without hiding the case-specific setup or expected behavior.
+- Avoid unnecessary helpers, wrappers, builders, parameterization, shared setup, and test-only frameworks.
+- Keep assertions focused on the smallest sufficient set of caller-observable results, state changes, side effects, or errors. Do not assert implementation details or restate the setup as the oracle.
+
 ## Maintenance
 
 - Read this file, the affected suite's `AGENTS.md` and local skill, the relevant review document, and mapped tests.
 - Find automation by searching for `TEST-MAP: <CASE-ID>`; do not maintain a separate mapping ledger.
 - Update an existing row in place when its behavior changes. Add or remove rows only when independently observable behavior is added or removed.
 - For PR analysis, translate each behavior change into affected review rows and the minimum test change for a concrete failure mode.
+- For every added or materially changed automated case, report why the case is needed and how its observable assertions prove the expected behavior.
 - Keep stable commands in the relevant suite README and use the target project's native runner and conventions.
 - Persist only stable instructions/commands, `reviews/README.md`, concise review documents, executable tests/fixtures/configuration, and `scripts/check_test_map.py`.
 
@@ -62,6 +70,8 @@ PR impact:
 - <changed behavior> -> <review document and case IDs> -> <required test action>
 Changed cases:
 - <ID> [P0/P1/P2] <scenario> -> <expected result>
+Added automation:
+- <ID>: why <behavior or regression risk>; assertions <observable result, state, side effect, or error and why it proves the expectation>
 Automation coverage: <mapped>/<reviewed>; unmapped: <IDs or none>
 Verification: <command> -> <result and exit status>
 Residual risk: <ambiguous, manual, unobservable, or none>

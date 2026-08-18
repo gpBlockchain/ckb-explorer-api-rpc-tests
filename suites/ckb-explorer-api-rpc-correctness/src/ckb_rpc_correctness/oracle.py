@@ -4,7 +4,12 @@ from dataclasses import dataclass
 from typing import Any, Callable, Mapping
 from urllib.parse import urlencode
 
-from .ckb import calculate_live_cell_changes, decode_hex_int
+from .ckb import (
+    block_cycles,
+    calculate_live_cell_changes,
+    decode_hex_int,
+    serialized_block_size_without_uncle_proposals,
+)
 from .http import HttpClientError, JsonHttpClient
 from .settings import NetworkSettings, Settings
 
@@ -31,6 +36,17 @@ class BlockSample:
     rpc_block: Mapping[str, Any]
 
 
+@dataclass(frozen=True)
+class EpochExtrema:
+    network: str
+    epoch: int
+    start_height: int
+    length: int
+    attributes: Mapping[str, Any]
+    largest_block: int
+    max_cycles: int | None
+
+
 class NetworkOracle:
     def __init__(self, network: NetworkSettings, settings: Settings, client: JsonHttpClient | None = None) -> None:
         self.network = network
@@ -42,9 +58,12 @@ class NetworkOracle:
         self._row_pages: dict[int, list[Mapping[str, Any]]] = {}
         self._rpc_tip: Mapping[str, Any] | None = None
         self._blocks: dict[int, Mapping[str, Any]] = {}
-        self._details: dict[int, Mapping[str, Any]] = {}
+        self._blocks_with_cycles: dict[int, Mapping[str, Any]] = {}
+        self._transactions: dict[str, Mapping[str, Any]] = {}
+        self._details: dict[str, Mapping[str, Any]] = {}
         self._samples: dict[str, BlockSample] = {}
         self._economic_states: dict[str, Mapping[str, Any]] = {}
+        self._completed_epoch: EpochExtrema | None = None
 
     def explorer_json(self, path: str, query: Mapping[str, object] | None = None) -> Any:
         url = self.network.explorer_api_url + path
@@ -71,6 +90,37 @@ class NetworkOracle:
         if response.get("error") is not None:
             raise OracleUnavailable(f"{self.network.name} RPC {method} error: {response['error']!r}")
         return response.get("result")
+
+    def rpc_batch_results(self, calls: list[tuple[str, list[object]]]) -> list[Any]:
+        payload = [
+            {"id": index, "jsonrpc": "2.0", "method": method, "params": params}
+            for index, (method, params) in enumerate(calls)
+        ]
+        try:
+            response = self.client.request_json(
+                self.network.ckb_rpc_url,
+                method="POST",
+                headers={"Content-Type": "application/json"},
+                json_body=payload,
+            )
+        except HttpClientError as error:
+            raise OracleUnavailable(f"{self.network.name} RPC batch unavailable: {error}") from error
+        if not isinstance(response, list):
+            raise OracleUnavailable(f"{self.network.name} RPC batch returned a non-array")
+        indexed: dict[int, Mapping[str, Any]] = {}
+        for item in response:
+            if not isinstance(item, dict) or not isinstance(item.get("id"), int):
+                raise OracleUnavailable(f"{self.network.name} RPC batch contains an invalid response")
+            indexed[item["id"]] = item
+        results: list[Any] = []
+        for index, (method, _params) in enumerate(calls):
+            item = indexed.get(index)
+            if item is None:
+                raise OracleUnavailable(f"{self.network.name} RPC batch omitted response {index}")
+            if item.get("error") is not None:
+                raise OracleUnavailable(f"{self.network.name} RPC {method} batch error: {item['error']!r}")
+            results.append(item.get("result"))
+        return results
 
     def list_rows(self, page: int = 1) -> list[Mapping[str, Any]]:
         if page not in self._row_pages:
@@ -122,15 +172,101 @@ class NetworkOracle:
             self._blocks[height] = result
         return result
 
-    def detail_attributes(self, height: int) -> Mapping[str, Any]:
-        if height not in self._details:
-            payload = self.explorer_json(f"/v1/blocks/{height}")
+    def block_by_hash(self, block_hash: str) -> Mapping[str, Any]:
+        result = self.rpc_result("get_block", [block_hash])
+        if not isinstance(result, dict):
+            raise OracleUnavailable(f"{self.network.name} RPC has no block for hash {block_hash}")
+        return result
+
+    def block_with_cycles(self, height: int) -> Mapping[str, Any]:
+        if height not in self._blocks_with_cycles:
+            result = self.rpc_result("get_block_by_number", [hex(height), "0x2", True])
+            if not isinstance(result, dict) or not isinstance(result.get("block"), dict):
+                raise OracleUnavailable(f"{self.network.name} RPC has no block-with-cycles at height {height}")
+            self._blocks_with_cycles[height] = result
+        return self._blocks_with_cycles[height]
+
+    def referenced_outputs(self, transaction: Mapping[str, Any]) -> list[tuple[Mapping[str, Any], object]]:
+        inputs = transaction.get("inputs")
+        if not isinstance(inputs, list):
+            raise OracleUnavailable(f"{self.network.name} RPC transaction inputs are invalid")
+        references: list[tuple[str, int]] = []
+        for index, item in enumerate(inputs):
+            previous = item.get("previous_output") if isinstance(item, dict) else None
+            tx_hash = previous.get("tx_hash") if isinstance(previous, dict) else None
+            raw_index = previous.get("index") if isinstance(previous, dict) else None
+            if not isinstance(tx_hash, str):
+                raise OracleUnavailable(f"{self.network.name} RPC input {index} has no previous transaction hash")
+            try:
+                output_index = decode_hex_int(raw_index, f"inputs[{index}].previous_output.index")
+            except ValueError as error:
+                raise OracleUnavailable(f"{self.network.name} RPC input {index} has invalid output index: {error}") from error
+            references.append((tx_hash, output_index))
+        missing = list(dict.fromkeys(tx_hash for tx_hash, _index in references if tx_hash not in self._transactions))
+        for offset in range(0, len(missing), self.settings.rpc_batch_size):
+            batch = missing[offset : offset + self.settings.rpc_batch_size]
+            results = self.rpc_batch_results([("get_transaction", [tx_hash]) for tx_hash in batch])
+            for tx_hash, result in zip(batch, results, strict=True):
+                previous_transaction = result.get("transaction") if isinstance(result, dict) else None
+                if not isinstance(previous_transaction, dict):
+                    raise OracleUnavailable(f"{self.network.name} RPC has no transaction {tx_hash}")
+                self._transactions[tx_hash] = previous_transaction
+        resolved: list[tuple[Mapping[str, Any], object]] = []
+        for tx_hash, output_index in references:
+            previous_transaction = self._transactions[tx_hash]
+            outputs = previous_transaction.get("outputs")
+            outputs_data = previous_transaction.get("outputs_data")
+            if not isinstance(outputs, list) or not isinstance(outputs_data, list) or len(outputs) != len(outputs_data):
+                raise OracleUnavailable(f"{self.network.name} RPC previous transaction {tx_hash} outputs are invalid")
+            if output_index >= len(outputs) or not isinstance(outputs[output_index], dict):
+                raise OracleUnavailable(
+                    f"{self.network.name} RPC previous transaction {tx_hash} has no output {output_index}"
+                )
+            resolved.append((outputs[output_index], outputs_data[output_index]))
+        return resolved
+
+    def prefetch_blocks(self, heights: list[int]) -> None:
+        missing = [height for height in heights if height not in self._blocks]
+        for offset in range(0, len(missing), self.settings.rpc_batch_size):
+            batch = missing[offset : offset + self.settings.rpc_batch_size]
+            results = self.rpc_batch_results([("get_block_by_number", [hex(height)]) for height in batch])
+            for height, result in zip(batch, results, strict=True):
+                if not isinstance(result, dict):
+                    raise OracleUnavailable(f"{self.network.name} RPC has no prefetched block at height {height}")
+                self._blocks[height] = result
+
+    def detail_attributes(self, identifier: int | str) -> Mapping[str, Any]:
+        key = str(identifier)
+        if key not in self._details:
+            payload = self.explorer_json(f"/v1/blocks/{identifier}")
             data = payload.get("data") if isinstance(payload, dict) else None
             attributes = data.get("attributes") if isinstance(data, dict) else None
             if not isinstance(attributes, dict):
-                raise OracleUnavailable(f"{self.network.name} Explorer detail has no attributes at height {height}")
-            self._details[height] = attributes
-        return self._details[height]
+                raise OracleUnavailable(f"{self.network.name} Explorer detail has no attributes for {identifier}")
+            self._details[key] = attributes
+        return self._details[key]
+
+    def block_transaction_page(
+        self,
+        block_hash: str,
+        **query: object,
+    ) -> tuple[list[Mapping[str, Any]], Mapping[str, Any]]:
+        params: dict[str, object] = {"page": 1, "page_size": self.settings.list_page_size}
+        params.update(query)
+        payload = self.explorer_json(f"/v1/block_transactions/{block_hash}", params)
+        data = payload.get("data") if isinstance(payload, dict) else None
+        meta = payload.get("meta") if isinstance(payload, dict) else None
+        if not isinstance(data, list) or not isinstance(meta, dict):
+            raise OracleUnavailable(f"{self.network.name} Explorer block transactions response is invalid")
+        rows: list[Mapping[str, Any]] = []
+        for index, row in enumerate(data):
+            attributes = row.get("attributes") if isinstance(row, dict) else None
+            if not isinstance(attributes, dict):
+                raise OracleUnavailable(
+                    f"{self.network.name} Explorer block transaction row {index} has no attributes"
+                )
+            rows.append(attributes)
+        return rows, meta
 
     def _eligible_rows(self) -> list[Mapping[str, Any]]:
         minimum_depth = self.settings.proposal_window + 1
@@ -187,8 +323,41 @@ class NetworkOracle:
             "transaction",
             lambda _attributes, block: isinstance(block.get("transactions"), list)
             and len(block["transactions"]) > 1,
-            priority=lambda attributes: (int(attributes.get("transactions_count", "0")) <= 1,),
+            priority=lambda attributes: (
+                int(attributes.get("transactions_count", "0")) <= 1,
+                int(attributes.get("transactions_count", "0")) > self.settings.list_page_size,
+                int(attributes.get("transactions_count", "0")),
+            ),
         )
+
+    def cellbase_only_sample(self) -> BlockSample:
+        return self._find_sample(
+            "cellbase-only",
+            lambda _attributes, block: isinstance(block.get("transactions"), list)
+            and len(block["transactions"]) == 1,
+            priority=lambda attributes: (int(attributes.get("transactions_count", "0")) != 1,),
+        )
+
+    def wide_transaction_sample(self) -> BlockSample:
+        rows = self._eligible_rows()
+        self.prefetch_blocks([int(attributes["number"]) for attributes in rows])
+
+        def has_wide_transaction(_attributes: Mapping[str, Any], block: Mapping[str, Any]) -> bool:
+            transactions = block.get("transactions")
+            if not isinstance(transactions, list):
+                return False
+            return any(
+                isinstance(transaction, dict)
+                and (
+                    isinstance(transaction.get("inputs"), list)
+                    and len(transaction["inputs"]) > 10
+                    or isinstance(transaction.get("outputs"), list)
+                    and len(transaction["outputs"]) > 10
+                )
+                for transaction in transactions[1:]
+            )
+
+        return self._find_sample("wide-transaction", has_wide_transaction)
 
     def live_change_sample(self) -> BlockSample:
         return self._find_sample(
@@ -210,6 +379,76 @@ class NetworkOracle:
 
         return self._find_sample("miner", has_witness)
 
+    def detail_sample(self, kind: str = "confirmed") -> BlockSample:
+        source = {
+            "confirmed": self.confirmed_sample,
+            "transaction": self.transaction_sample,
+            "miner": self.miner_sample,
+        }[kind]()
+        key = f"detail-{kind}"
+        if key not in self._samples:
+            self._samples[key] = BlockSample(
+                source.network,
+                source.height,
+                self.detail_attributes(source.height),
+                source.rpc_block,
+            )
+        return self._samples[key]
+
+    def proposal_sample(self) -> BlockSample:
+        source = self._find_sample(
+            "proposal",
+            lambda _attributes, block: isinstance(block.get("proposals"), list) and bool(block["proposals"]),
+        )
+        return BlockSample(source.network, source.height, self.detail_attributes(source.height), source.rpc_block)
+
+    def output_sample(self, *, typed_or_data: bool = False) -> BlockSample:
+        def matches(_attributes: Mapping[str, Any], block: Mapping[str, Any]) -> bool:
+            transactions = block.get("transactions")
+            if not isinstance(transactions, list):
+                return False
+            output_count = 0
+            has_typed_or_data = False
+            for transaction in transactions:
+                if not isinstance(transaction, dict):
+                    return False
+                outputs = transaction.get("outputs")
+                outputs_data = transaction.get("outputs_data")
+                if not isinstance(outputs, list) or not isinstance(outputs_data, list):
+                    return False
+                output_count += len(outputs)
+                has_typed_or_data = has_typed_or_data or any(
+                    isinstance(output, dict) and output.get("type") is not None for output in outputs
+                )
+                has_typed_or_data = has_typed_or_data or any(data not in {None, "0x"} for data in outputs_data)
+            return output_count > 1 and (has_typed_or_data or not typed_or_data)
+
+        key = "output-typed-data" if typed_or_data else "output"
+        source = self._find_sample(key, matches)
+        return BlockSample(source.network, source.height, self.detail_attributes(source.height), source.rpc_block)
+
+    def uncle_sample(self, *, present: bool) -> BlockSample:
+        key = "uncle-present" if present else "uncle-empty"
+        if present and key not in self._samples:
+            self.prefetch_blocks([int(attributes["number"]) for attributes in self._eligible_rows()])
+        source = self._find_sample(
+            key,
+            lambda _attributes, block: isinstance(block.get("uncles"), list) and bool(block["uncles"]) is present,
+        )
+        return BlockSample(source.network, source.height, self.detail_attributes(source.height), source.rpc_block)
+
+    def pending_sample(self) -> BlockSample:
+        if "detail-pending" not in self._samples:
+            height = self.api_tip_height()
+            block = self.block(height)
+            self._samples["detail-pending"] = BlockSample(
+                self.network.name,
+                height,
+                self.detail_attributes(height),
+                block,
+            )
+        return self._samples["detail-pending"]
+
     def economic_state(self, block_hash: str) -> Mapping[str, Any]:
         if block_hash not in self._economic_states:
             result = self.rpc_result("get_block_economic_state", [block_hash])
@@ -225,6 +464,122 @@ class NetworkOracle:
         if not isinstance(block_hash, str):
             raise OracleUnavailable(f"{self.network.name} RPC reward sample has no block hash")
         return sample, self.economic_state(block_hash)
+
+    def detail_reward_sample(self) -> tuple[BlockSample, Mapping[str, Any]]:
+        sample, state = self.reward_sample()
+        return BlockSample(sample.network, sample.height, self.detail_attributes(sample.height), sample.rpc_block), state
+
+    def fee_sample(self) -> tuple[BlockSample, Mapping[str, Any]]:
+        if "detail-fee" in self._samples:
+            sample = self._samples["detail-fee"]
+            header = sample.rpc_block.get("header")
+            block_hash = header.get("hash") if isinstance(header, dict) else None
+            if not isinstance(block_hash, str):
+                raise OracleUnavailable(f"{self.network.name} cached fee sample has no hash")
+            return sample, self.economic_state(block_hash)
+        rows = sorted(
+            self._eligible_rows(),
+            key=lambda attributes: (int(attributes.get("transactions_count", "0")) <= 1,),
+        )
+        for attributes in rows:
+            height = int(attributes["number"])
+            block = self.block(height)
+            transactions = block.get("transactions")
+            if not isinstance(transactions, list) or len(transactions) <= 1:
+                continue
+            header = block.get("header")
+            block_hash = header.get("hash") if isinstance(header, dict) else None
+            if not isinstance(block_hash, str):
+                continue
+            state = self.economic_state(block_hash)
+            try:
+                fee = decode_hex_int(state.get("txs_fee"), "economic_state.txs_fee")
+            except ValueError:
+                continue
+            if fee > 0:
+                sample = BlockSample(self.network.name, height, self.detail_attributes(height), block)
+                self._samples["detail-fee"] = sample
+                return sample, state
+        raise OracleUnavailable(f"{self.network.name} has no mature non-zero-fee block fixture")
+
+    def completed_epoch_extrema(self) -> EpochExtrema:
+        if self._completed_epoch is not None:
+            return self._completed_epoch
+        current = self.detail_attributes(self.api_tip_height())
+        try:
+            candidate_height = int(current["start_number"]) - 1
+        except (KeyError, TypeError, ValueError) as error:
+            raise OracleUnavailable(f"{self.network.name} current detail has invalid start_number") from error
+
+        previous: Mapping[str, Any] | None = None
+        epoch = 0
+        start = 0
+        length = 0
+        for _candidate in range(5):
+            attributes = self.detail_attributes(candidate_height)
+            try:
+                epoch = int(attributes["epoch"])
+                start = int(attributes["start_number"])
+                length = int(attributes["length"])
+            except (KeyError, TypeError, ValueError) as error:
+                raise OracleUnavailable(
+                    f"{self.network.name} completed Epoch candidate fields are invalid"
+                ) from error
+            if (
+                attributes.get("largest_block_in_epoch") is not None
+                and attributes.get("max_cycles_in_epoch") is not None
+            ):
+                previous = attributes
+                break
+            candidate_height = start - 1
+        if previous is None:
+            raise OracleUnavailable(
+                f"{self.network.name} last 5 completed Epochs have no generated size/cycles statistics"
+            )
+
+        heights = list(range(start, start + length))
+        largest = 0
+        maximum_cycles: int | None = None
+        for offset in range(0, len(heights), self.settings.rpc_batch_size):
+            batch = heights[offset : offset + self.settings.rpc_batch_size]
+            results = self.rpc_batch_results(
+                [("get_block_by_number", [hex(height), "0x2", True]) for height in batch]
+            )
+            for height, result in zip(batch, results, strict=True):
+                if not isinstance(result, dict) or not isinstance(result.get("block"), dict):
+                    raise OracleUnavailable(f"{self.network.name} missing Epoch block {height}")
+                self._blocks_with_cycles[height] = result
+                try:
+                    largest = max(largest, serialized_block_size_without_uncle_proposals(result["block"]))
+                    cycles = block_cycles(result)
+                except ValueError as error:
+                    raise OracleUnavailable(f"{self.network.name} invalid Epoch block {height}: {error}") from error
+                raw_cycles = result.get("cycles")
+                if isinstance(raw_cycles, list) and raw_cycles:
+                    maximum_cycles = max(maximum_cycles or 0, cycles)
+        self._completed_epoch = EpochExtrema(
+            self.network.name,
+            epoch,
+            start,
+            length,
+            previous,
+            largest,
+            maximum_cycles,
+        )
+        return self._completed_epoch
+
+    def epoch_statistics(self) -> list[Mapping[str, Any]]:
+        payload = self.explorer_json("/v1/epoch_statistics/updated_at")
+        data = payload.get("data") if isinstance(payload, dict) else None
+        if not isinstance(data, list) or not data:
+            raise OracleUnavailable(f"{self.network.name} Explorer epoch statistics have no data")
+        attributes: list[Mapping[str, Any]] = []
+        for index, row in enumerate(data):
+            item = row.get("attributes") if isinstance(row, dict) else None
+            if not isinstance(item, dict):
+                raise OracleUnavailable(f"{self.network.name} Epoch statistic {index} has no attributes")
+            attributes.append(item)
+        return attributes
 
     def ensure_stable(self, sample: BlockSample) -> None:
         original_header = sample.rpc_block.get("header")
