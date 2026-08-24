@@ -1,6 +1,6 @@
 # V1 区块交易列表 RPC 正确性用例评审
 
-评审范围：在公开主网和测试网分别以同网络 CKB RPC 为事实基准，核对 `GET /api/v1/block_transactions/:block_hash` 返回的区块交易集合、链上顺序、可验证摘要字段以及 `tx_hash`、`address_hash` 过滤语义
+评审范围：在公开主网和测试网分别以同网络 CKB RPC 为事实基准，核对 `GET /api/v1/block_transactions/:id`（`:id` 为区块哈希）返回的区块交易集合、链上顺序、可验证摘要字段以及 `tx_hash`、`address_hash` 过滤语义
 源码版本：`develop@0495ecd00a839f7618bad752f5ad92071124a991`
 
 ## 接口说明
@@ -8,7 +8,7 @@
 - 接口作用：按 `0x` 前缀规范链区块哈希返回该区块的交易摘要列表，并可按交易哈希或链上地址进一步过滤；本评审只判断 Explorer 结果是否与同一 CKB 网络一致，并要求主网、测试网各自产生独立结论。
 - 公开主网：Explorer `https://mainnet-api.explorer.nervos.org/api`；CKB RPC `https://mainnet.ckbapp.dev/`。
 - 公开测试网：Explorer `https://testnet-api.explorer.nervos.org/api`；CKB RPC `https://testnet.ckbapp.dev/`。
-- 输入：每个网络分别调用 Explorer `GET /api/v1/block_transactions/:block_hash`，并按用例附加 `tx_hash`、`address_hash`；RPC 使用 `get_tip_header`、`get_block_by_number`、`get_block` 和 `get_transaction` 取得区块、当前交易及输入引用的上一笔交易。
+- 输入：每个网络分别调用 Explorer `GET /api/v1/block_transactions/:id`，其中 `:id` 使用区块哈希，并按用例附加 `tx_hash`、`address_hash`；RPC 使用 `get_tip_header`、`get_block_by_number`、`get_block` 和 `get_transaction` 取得区块、当前交易及输入引用的上一笔交易。
 - 取样：每个网络先用高度 0 的哈希校验 Explorer/RPC 链身份；分别选择仅含 Cellbase、含普通交易、地址参与关系可由 Lock Script 推导以及普通交易输入或输出超过 10 项的已确认区块。分页仅用于收集完整结果，不评审分页协议本身；比较期间若同一高度的 RPC 哈希改变，则该网络本次样本按重组处理，不作数据正确性结论。
 - 成功结果：Explorer 交易集合、链上顺序、区块上下文和过滤结果与同网络 RPC 精确一致；RPC 十六进制整数无损转换后比较，容量和占用容量均以 Shannon 整数核对，地址按主网或测试网规则从 Lock Script 编码。
 - 失败结果：指出网络、区块高度与哈希、过滤条件、交易哈希、字段路径、API 值、RPC 原值、转换或推导后的期望值及差异；单个公开 URL 超时、返回错误、缺少目标区块或输入引用交易时，只将该网络标记为事实基准不可用，不影响另一网络的结论，也不把它判成 API 数据错误。
