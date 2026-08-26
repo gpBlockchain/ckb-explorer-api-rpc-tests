@@ -7,8 +7,122 @@
 - 已完成：`GET /api/v1/transactions`
 - 已完成：`GET /api/v1/transactions/:id`
 - 已完成：`POST /api/v1/transactions/query`
-- ACTIVE TODO：117
-- 路由审计 TODO：29
+- 已完成：`GET /api/v1/cell_input_lock_scripts/:id`
+- 已完成：`GET /api/v1/cell_input_type_scripts/:id`
+- 已完成：`GET /api/v1/cell_input_data/:id`
+- 已完成：`GET /api/v1/cell_output_lock_scripts/:id`
+- 已完成：`GET /api/v1/cell_output_type_scripts/:id`
+- 已完成：`GET /api/v1/cell_output_data/:id`
+- 已完成：`GET /api/v2/ckb_transactions/:id/details`
+- 已完成：`GET /api/v2/ckb_transactions/:id/display_inputs`
+- 已完成：`GET /api/v2/ckb_transactions/:id/display_outputs`
+- 已完成：`GET /api/v2/transactions/:id/raw`
+- 已完成：`GET /api/v2/transactions/:id/details`
+- 已完成：`GET /api/v2/pending_transactions`
+- 已完成：`GET /api/v2/pending_transactions/count`
+- 已完成：`GET /api/v2/blocks/by_epoch`
+- 已完成：`GET /api/v2/blocks/ckb_node_versions`
+- 已完成：`GET /api/v1/addresses/:id`
+- 已完成：`GET /api/v1/address_dao_transactions/:id`
+- 已完成：`GET /api/v1/address_transactions/:id`
+- 已完成：`GET /api/v1/address_transactions/download_csv`
+- 已完成：`GET /api/v1/dao_contract_transactions/:id`
+- 已完成：`GET /api/v1/dao_depositors`
+- 已完成：`GET /api/v1/dao_depositors/download_csv`
+- 已完成：`GET /api/v1/address_pending_transactions/:id`
+- 已完成：`GET /api/v1/address_live_cells/:id`
+- 已完成：`GET /api/v1/address_deployed_cells/:id`
+- 已完成：`GET /api/v2/dao_events`
+- 已完成：`GET /api/v1/contract_transactions/:id`
+- 已完成：`GET /api/v1/contract_transactions/download_csv`
+- 已完成：`GET /api/v1/contracts/:id`
+- 已完成：`GET /api/v2/scripts`
+- 已完成：`GET /api/v2/scripts/ckb_transactions`
+- 已完成：`GET /api/v2/scripts/deployed_cells`
+- 已完成：`GET /api/v2/scripts/referring_cells`
+- 已完成：`GET /api/v2/scripts/general_info`
+- 已完成：`GET /api/v1/udt_queries`
+- 已完成：`GET /api/v1/udts`
+- 已完成：`GET /api/v1/udts/download_csv`
+- 已完成：`GET /api/v1/udts/:id`
+- 已完成：`GET /api/v1/udts/:id/holder_allocation`
+- 已完成：`GET /api/v1/xudts`
+- 已完成：`GET /api/v1/xudts/snapshot`
+- 已完成：`GET /api/v1/xudts/:id`
+- 已完成：`GET /api/v1/fungible_tokens`
+- 已完成：`GET /api/v1/fungible_tokens/download_csv`
+- 已完成：`GET /api/v1/fungible_tokens/:id`
+- 已完成：`GET /api/v1/omiga_inscriptions`
+- 已完成：`GET /api/v1/omiga_inscriptions/download_csv`
+- 已完成：`GET /api/v1/omiga_inscriptions/:id`
+- 已完成：`GET /api/v1/udt_transactions/:id`
+- 已完成：`GET /api/v1/address_udt_transactions/:id`
+- 已完成：`PATCH /api/v1/udt_verifications/:id`
+- 已完成：`PUT /api/v1/udt_verifications/:id`
+- 已完成：`GET /api/v2/udt_hourly_statistics`
+- 已完成：`GET /api/v2/udt_hourly_statistics/:id`
+- 已完成：`POST /api/v2/das_accounts`
+- 已完成：`POST /api/v2/bitcoin_transactions`
+- 已完成：`GET /api/v2/ckb_transactions/:id/rgb_digest`
+- 已完成：`GET /api/v2/nft/collections`
+- 已完成：`GET /api/v2/nft/collections/:id`
+- 已完成：`GET /api/v2/nft/collections/:collection_id/holders`
+- 已完成：`GET /api/v2/nft/collections/:collection_id/transfers`
+- 已完成：`GET /api/v2/nft/collections/:collection_id/items`
+- 已完成：`GET /api/v2/nft/collections/:collection_id/items/:id`
+- 已完成：`GET /api/v2/nft/collections/:collection_id/items/:item_id/transfers`
+- 已完成：`GET /api/v2/nft/collections/:collection_id/items/:item_id/transfers/:id`
+- 已完成：`GET /api/v2/nft/items`
+- 已完成：`GET /api/v2/nft/transfers`
+- 已完成：`GET /api/v2/nft/transfers/download_csv`
+- 已完成：`GET /api/v2/nft/transfers/:id`
+- 已完成：`GET /api/v2/bitcoin_statistics`
+- 已完成：`GET /api/v2/bitcoin_addresses/:id`
+- 已完成：`GET /api/v2/bitcoin_addresses/:id/rgb_cells`
+- 已完成：`GET /api/v2/bitcoin_addresses/:id/udt_accounts`
+- 已完成：`GET /api/v2/rgb_live_cells`
+- 已完成：`GET /api/v2/rgb_transactions`
+- 已完成：`GET /api/v2/rgb_assets_statistics`
+- 已完成：`GET /api/v2/rgb_top_holders/:id`
+- 已完成：`GET /api/v1/external/stats/:id`
+- 已完成：`GET /api/v1/suggest_queries`
+- 已完成：`GET /api/v1/statistics`
+- 已完成：`GET /api/v1/statistics/:id`
+- 已完成：`GET /api/v1/nets`
+- 已完成：`GET /api/v1/nets/:id`
+- 已完成：`GET /api/v1/statistic_info_charts`
+- 已完成：`GET /api/v1/daily_statistics/:id`
+- 已完成：`GET /api/v1/epoch_statistics/:id`
+- 已完成：`GET /api/v1/market_data`
+- 已完成：`GET /api/v1/market_data/:id`
+- 已完成：`GET /api/v1/distribution_data/:id`
+- 已完成：`GET /api/v1/monetary_data/:id`
+- 已完成：`GET /api/v2/monitors/daily_statistics`
+- 已完成：`GET /api/v2/statistics/transaction_fees`
+- 已完成：`GET /api/v2/statistics/contract_resource_distributed`
+- 已完成：`POST /api/v2/portfolio/sessions`
+- 已完成：`PATCH /api/v2/portfolio/user`
+- 已完成：`PUT /api/v2/portfolio/user`
+- 已完成：`GET /api/v2/portfolio/statistics`
+- 已完成：`POST /api/v2/portfolio/addresses`
+- 已完成：`GET /api/v2/portfolio/udt_accounts`
+- 已完成：`GET /api/v2/portfolio/ckb_transactions`
+- 已完成：`GET /api/v2/portfolio/ckb_transactions/download_csv`
+- 已完成：`GET /api/v2/fiber/peers`
+- 已完成：`POST /api/v2/fiber/peers`
+- 已完成：`GET /api/v2/fiber/peers/:peer_id`
+- 已完成：`GET /api/v2/fiber/channels/:channel_id`
+- 已完成：`GET /api/v2/fiber/graph_nodes`
+- 已完成：`GET /api/v2/fiber/graph_nodes/addresses`
+- 已完成：`GET /api/v2/fiber/graph_nodes/:node_id`
+- 已完成：`GET /api/v2/fiber/graph_nodes/:node_id/graph_channels`
+- 已完成：`GET /api/v2/fiber/graph_nodes/:node_id/transactions`
+- 已完成：`GET /api/v2/fiber/graph_channels`
+- 已完成：`GET /api/v2/fiber/statistics`
+- 已完成：`GET /api/v2/fiber/statistics/:id`
+- ACTIVE TODO：4
+- 路由审计：不测试（29 个 ROUTE_ONLY / NAMESPACE_MISMATCH 入口排除自动化）
+- 路由审计 TODO：0
 
 ## gp：Chain Data（20）
 
@@ -17,167 +131,167 @@
 - [x] `GET /api/v1/transactions` — 交易列表
 - [x] `GET /api/v1/transactions/:id` — 交易详情
 - [x] `POST /api/v1/transactions/query` — 批量/条件查询交易
-- [ ] `GET /api/v1/cell_input_lock_scripts/:id` — 输入 Cell Lock Script
-- [ ] `GET /api/v1/cell_input_type_scripts/:id` — 输入 Cell Type Script
-- [ ] `GET /api/v1/cell_input_data/:id` — 输入 Cell Data
-- [ ] `GET /api/v1/cell_output_lock_scripts/:id` — 输出 Cell Lock Script
-- [ ] `GET /api/v1/cell_output_type_scripts/:id` — 输出 Cell Type Script
-- [ ] `GET /api/v1/cell_output_data/:id` — 输出 Cell Data
-- [ ] `GET /api/v2/ckb_transactions/:id/details` — 交易资产变更明细
-- [ ] `GET /api/v2/ckb_transactions/:id/display_inputs` — 分页展示交易输入
-- [ ] `GET /api/v2/ckb_transactions/:id/display_outputs` — 分页展示交易输出
-- [ ] `GET /api/v2/transactions/:id/raw` — 原始交易结构
-- [ ] `GET /api/v2/transactions/:id/details` — CKB 容量变更明细
-- [ ] `GET /api/v2/pending_transactions` — 待处理交易列表
-- [ ] `GET /api/v2/pending_transactions/count` — 待处理交易数量
-- [ ] `GET /api/v2/blocks/ckb_node_versions` — CKB 节点版本分布
-- [ ] `GET /api/v2/blocks/by_epoch` — 按 Epoch 查询区块
+- [x] `GET /api/v1/cell_input_lock_scripts/:id` — 输入 Cell Lock Script
+- [x] `GET /api/v1/cell_input_type_scripts/:id` — 输入 Cell Type Script
+- [x] `GET /api/v1/cell_input_data/:id` — 输入 Cell Data
+- [x] `GET /api/v1/cell_output_lock_scripts/:id` — 输出 Cell Lock Script
+- [x] `GET /api/v1/cell_output_type_scripts/:id` — 输出 Cell Type Script
+- [x] `GET /api/v1/cell_output_data/:id` — 输出 Cell Data
+- [x] `GET /api/v2/ckb_transactions/:id/details` — 交易资产变更明细
+- [x] `GET /api/v2/ckb_transactions/:id/display_inputs` — 分页展示交易输入
+- [x] `GET /api/v2/ckb_transactions/:id/display_outputs` — 分页展示交易输出
+- [x] `GET /api/v2/transactions/:id/raw` — 原始交易结构
+- [x] `GET /api/v2/transactions/:id/details` — CKB 容量变更明细
+- [x] `GET /api/v2/pending_transactions` — 待处理交易列表
+- [x] `GET /api/v2/pending_transactions/count` — 待处理交易数量
+- [x] `GET /api/v2/blocks/ckb_node_versions` — CKB 节点版本分布
+- [x] `GET /api/v2/blocks/by_epoch` — 按 Epoch 查询区块
 
 ## scz：Address / DAO + Contract / Script（19）
 
-- [ ] `GET /api/v1/addresses/:id` — 地址详情
-- [ ] `GET /api/v1/address_dao_transactions/:id` — 地址 DAO 交易
-- [ ] `GET /api/v1/address_transactions/:id` — 地址交易列表
-- [ ] `GET /api/v1/address_transactions/download_csv` — 导出地址交易 CSV
-- [ ] `GET /api/v1/dao_contract_transactions/:id` — DAO 合约交易
-- [ ] `GET /api/v1/dao_depositors` — DAO 存款人列表
-- [ ] `GET /api/v1/dao_depositors/download_csv` — 导出 DAO 存款人 CSV
-- [ ] `GET /api/v1/address_pending_transactions/:id` — 地址待处理交易
-- [ ] `GET /api/v1/address_live_cells/:id` — 地址 Live Cells
-- [ ] `GET /api/v1/address_deployed_cells/:id` — 地址部署 Cells
-- [ ] `GET /api/v2/dao_events` — DAO 事件列表
-- [ ] `GET /api/v1/contract_transactions/:id` — 合约交易列表
-- [ ] `GET /api/v1/contract_transactions/download_csv` — 导出合约交易 CSV
-- [ ] `GET /api/v1/contracts/:id` — 合约详情
-- [ ] `GET /api/v2/scripts` — 脚本列表
-- [ ] `GET /api/v2/scripts/ckb_transactions` — 脚本关联交易
-- [ ] `GET /api/v2/scripts/deployed_cells` — 脚本部署 Cells
-- [ ] `GET /api/v2/scripts/referring_cells` — 脚本引用 Cells
-- [ ] `GET /api/v2/scripts/general_info` — 脚本通用信息
+- [x] `GET /api/v1/addresses/:id` — 地址详情
+- [x] `GET /api/v1/address_dao_transactions/:id` — 地址 DAO 交易
+- [x] `GET /api/v1/address_transactions/:id` — 地址交易列表
+- [x] `GET /api/v1/address_transactions/download_csv` — 导出地址交易 CSV
+- [x] `GET /api/v1/dao_contract_transactions/:id` — DAO 合约交易
+- [x] `GET /api/v1/dao_depositors` — DAO 存款人列表
+- [x] `GET /api/v1/dao_depositors/download_csv` — 导出 DAO 存款人 CSV
+- [x] `GET /api/v1/address_pending_transactions/:id` — 地址待处理交易
+- [x] `GET /api/v1/address_live_cells/:id` — 地址 Live Cells
+- [x] `GET /api/v1/address_deployed_cells/:id` — 地址部署 Cells
+- [x] `GET /api/v2/dao_events` — DAO 事件列表
+- [x] `GET /api/v1/contract_transactions/:id` — 合约交易列表
+- [x] `GET /api/v1/contract_transactions/download_csv` — 导出合约交易 CSV
+- [x] `GET /api/v1/contracts/:id` — 合约详情
+- [x] `GET /api/v2/scripts` — 脚本列表
+- [x] `GET /api/v2/scripts/ckb_transactions` — 脚本关联交易
+- [x] `GET /api/v2/scripts/deployed_cells` — 脚本部署 Cells
+- [x] `GET /api/v2/scripts/referring_cells` — 脚本引用 Cells
+- [x] `GET /api/v2/scripts/general_info` — 脚本通用信息
 
 ## xyl：Token / UDT（23）
 
-- [ ] `GET /api/v1/udt_queries` — UDT 搜索
-- [ ] `GET /api/v1/udts` — UDT 列表
-- [ ] `GET /api/v1/udts/download_csv` — 导出 UDT CSV
-- [ ] `GET /api/v1/udts/:id` — UDT 详情
-- [ ] `PATCH /api/v1/udts/:id` — 更新 UDT 元数据
-- [ ] `PUT /api/v1/udts/:id` — 更新 UDT 元数据
-- [ ] `GET /api/v1/udts/:id/holder_allocation` — UDT 持仓分布
-- [ ] `GET /api/v1/xudts` — xUDT 列表
-- [ ] `GET /api/v1/xudts/download_csv` — 导出 xUDT CSV
-- [ ] `GET /api/v1/xudts/snapshot` — xUDT 快照
-- [ ] `GET /api/v1/xudts/:id` — xUDT 详情
-- [ ] `GET /api/v1/fungible_tokens` — 同质化代币列表
-- [ ] `GET /api/v1/fungible_tokens/download_csv` — 导出同质化代币 CSV
-- [ ] `GET /api/v1/fungible_tokens/:id` — 同质化代币详情
-- [ ] `GET /api/v1/omiga_inscriptions` — Omiga 铭文列表
-- [ ] `GET /api/v1/omiga_inscriptions/download_csv` — 导出 Omiga 铭文 CSV
-- [ ] `GET /api/v1/omiga_inscriptions/:id` — Omiga 铭文详情
-- [ ] `GET /api/v1/udt_transactions/:id` — UDT 交易列表
-- [ ] `GET /api/v1/address_udt_transactions/:id` — 地址 UDT 交易
-- [ ] `PATCH /api/v1/udt_verifications/:id` — 更新 UDT 验证
-- [ ] `PUT /api/v1/udt_verifications/:id` — 更新 UDT 验证
-- [ ] `GET /api/v2/udt_hourly_statistics` — UDT 小时统计列表
-- [ ] `GET /api/v2/udt_hourly_statistics/:id` — UDT 小时统计详情
+- [x] `GET /api/v1/udt_queries` — UDT 搜索
+- [x] `GET /api/v1/udts` — UDT 列表
+- [x] `GET /api/v1/udts/download_csv` — 导出 UDT CSV
+- [x] `GET /api/v1/udts/:id` — UDT 详情
+- [ ] `PATCH /api/v1/udts/:id` — 更新 UDT 元数据（阻塞：两网写请求均被边缘层 HTTP 403/1010 拦截，且无可回滚受控 UDT/验证码夹具）
+- [ ] `PUT /api/v1/udts/:id` — 更新 UDT 元数据（阻塞：两网写请求均被边缘层 HTTP 403/1010 拦截，且无可回滚受控 UDT/验证码夹具）
+- [x] `GET /api/v1/udts/:id/holder_allocation` — UDT 持仓分布
+- [x] `GET /api/v1/xudts` — xUDT 列表
+- [ ] `GET /api/v1/xudts/download_csv` — 导出 xUDT CSV（阻塞：两网已发布 xUDT 导出夹具均仅有表头，无已提交交易可验证评审行为）
+- [x] `GET /api/v1/xudts/snapshot` — xUDT 快照
+- [x] `GET /api/v1/xudts/:id` — xUDT 详情
+- [x] `GET /api/v1/fungible_tokens` — 同质化代币列表
+- [x] `GET /api/v1/fungible_tokens/download_csv` — 导出同质化代币 CSV
+- [x] `GET /api/v1/fungible_tokens/:id` — 同质化代币详情
+- [x] `GET /api/v1/omiga_inscriptions` — Omiga 铭文列表
+- [x] `GET /api/v1/omiga_inscriptions/download_csv` — 导出 Omiga 铭文 CSV
+- [x] `GET /api/v1/omiga_inscriptions/:id` — Omiga 铭文详情
+- [x] `GET /api/v1/udt_transactions/:id` — UDT 交易列表
+- [x] `GET /api/v1/address_udt_transactions/:id` — 地址 UDT 交易
+- [x] `PATCH /api/v1/udt_verifications/:id` — 更新 UDT 验证
+- [x] `PUT /api/v1/udt_verifications/:id` — 更新 UDT 验证
+- [x] `GET /api/v2/udt_hourly_statistics` — UDT 小时统计列表
+- [x] `GET /api/v2/udt_hourly_statistics/:id` — UDT 小时统计详情
 
 ## gp：NFT / RGB / Bitcoin（23）
 
-- [ ] `POST /api/v2/das_accounts` — DAS 账户查询
-- [ ] `POST /api/v2/bitcoin_transactions` — Bitcoin 交易查询
-- [ ] `GET /api/v2/ckb_transactions/:id/rgb_digest` — RGB++ 交易摘要
-- [ ] `GET /api/v2/nft/collections` — NFT 集合列表
-- [ ] `GET /api/v2/nft/collections/:id` — NFT 集合详情
-- [ ] `GET /api/v2/nft/collections/:collection_id/holders` — NFT 集合持有人
-- [ ] `GET /api/v2/nft/collections/:collection_id/transfers` — NFT 集合转移记录
-- [ ] `GET /api/v2/nft/collections/:collection_id/items` — 集合 NFT Item 列表
-- [ ] `GET /api/v2/nft/collections/:collection_id/items/:id` — NFT Item 详情
-- [ ] `GET /api/v2/nft/collections/:collection_id/items/:item_id/transfers` — NFT Item 转移列表
-- [ ] `GET /api/v2/nft/collections/:collection_id/items/:item_id/transfers/:id` — NFT Item 转移详情
-- [ ] `GET /api/v2/nft/items` — 全局 NFT Item 列表
-- [ ] `GET /api/v2/nft/transfers` — 全局 NFT 转移列表
-- [ ] `GET /api/v2/nft/transfers/download_csv` — 导出 NFT 转移 CSV
-- [ ] `GET /api/v2/nft/transfers/:id` — NFT 转移详情
-- [ ] `GET /api/v2/bitcoin_statistics` — Bitcoin 统计
-- [ ] `GET /api/v2/bitcoin_addresses/:id` — Bitcoin 地址详情
-- [ ] `GET /api/v2/bitcoin_addresses/:id/rgb_cells` — Bitcoin 地址 RGB Cells
-- [ ] `GET /api/v2/bitcoin_addresses/:id/udt_accounts` — Bitcoin 地址 UDT 账户
-- [ ] `GET /api/v2/rgb_live_cells` — RGB Live Cells
-- [ ] `GET /api/v2/rgb_transactions` — RGB 交易列表
-- [ ] `GET /api/v2/rgb_assets_statistics` — RGB 资产统计
-- [ ] `GET /api/v2/rgb_top_holders/:id` — RGB Top Holders
+- [x] `POST /api/v2/das_accounts` — DAS 账户查询
+- [x] `POST /api/v2/bitcoin_transactions` — Bitcoin 交易查询（已记录：测试网未合并 signet 命中，`BTC-QUERY-RPC-05` 为 expectedFailure；公开路由无上游故障注入点，`BTC-QUERY-RPC-07` 保持未映射）
+- [x] `GET /api/v2/ckb_transactions/:id/rgb_digest` — RGB++ 交易摘要
+- [x] `GET /api/v2/nft/collections` — NFT 集合列表（已记录 expectedFailure：测试网有 2 个集合未落入四种标准；排序并列的公开 timestamp 与内部排序列不一致；overflow 页 `pagination.in=null`）
+- [x] `GET /api/v2/nft/collections/:id` — NFT 集合详情（已记录 expectedFailure：主网 m-NFT 描述未同步最新 Class Cell；详情未输出 NRC-721 symbol）
+- [x] `GET /api/v2/nft/collections/:collection_id/holders` — NFT 集合持有人
+- [x] `GET /api/v2/nft/collections/:collection_id/transfers` — NFT 集合转移记录
+- [x] `GET /api/v2/nft/collections/:collection_id/items` — 集合 NFT Item 列表
+- [x] `GET /api/v2/nft/collections/:collection_id/items/:id` — NFT Item 详情
+- [x] `GET /api/v2/nft/collections/:collection_id/items/:item_id/transfers` — NFT Item 转移列表（已记录 expectedFailure：当前控制器未读取 `item_id`，返回整个集合历史）
+- [x] `GET /api/v2/nft/collections/:collection_id/items/:item_id/transfers/:id` — NFT Item 转移详情（已记录 expectedFailure：当前控制器只按 transfer ID 查询，忽略集合与 Item 父路径）
+- [x] `GET /api/v2/nft/items` — 全局 NFT Item 列表（已记录 expectedFailure：两网正常 Item 未完全落入四种标准；Token ID 并列导致相邻页重复；overflow `pagination.in=null`）
+- [x] `GET /api/v2/nft/transfers` — 全局 NFT 转移列表
+- [x] `GET /api/v2/nft/transfers/download_csv` — 导出 NFT 转移 CSV
+- [x] `GET /api/v2/nft/transfers/:id` — NFT 转移详情
+- [x] `GET /api/v2/bitcoin_statistics` — Bitcoin 统计（公开环境无同库 `created_at` 快照、refresh 控制与空库夹具，窗口/重放/空库子测试按评审标记 oracle unavailable）
+- [x] `GET /api/v2/bitcoin_addresses/:id` — Bitcoin 地址详情
+- [x] `GET /api/v2/bitcoin_addresses/:id/rgb_cells` — Bitcoin 地址 RGB Cells
+- [x] `GET /api/v2/bitcoin_addresses/:id/udt_accounts` — Bitcoin 地址 UDT 账户（公开夹具无超过 `2^53` 的余额，该子测试按评审标记 oracle unavailable）
+- [x] `GET /api/v2/rgb_live_cells` — RGB Live Cells（已记录 `fast_page` 跨页重复的 expectedFailure；旧测试网锁的 Bitcoin RPC 样本不可用时按网络 skip）
+- [x] `GET /api/v2/rgb_transactions` — RGB 交易列表（已记录同高度并列项缺少稳定次级排序导致跨页成员漂移的 expectedFailure）
+- [x] `GET /api/v2/rgb_assets_statistics` — RGB 资产统计（公开接口不暴露同索引历史截面，复算子测试按评审标记 oracle unavailable）
+- [x] `GET /api/v2/rgb_top_holders/:id` — RGB Top Holders（多映射 BTC Top-10、精度碰撞边界及部分测试网夹具当前不可得，相应网络 subTest 按评审标记 oracle unavailable）
 
 ## scz：Statistics / Discovery（17）
 
-- [ ] `GET /api/v1/external/stats/:id` — 外部统计详情
-- [ ] `GET /api/v1/suggest_queries` — 搜索建议
-- [ ] `GET /api/v1/statistics` — 统计列表
-- [ ] `GET /api/v1/statistics/:id` — 统计详情
-- [ ] `GET /api/v1/nets` — 网络信息列表
-- [ ] `GET /api/v1/nets/:id` — 网络信息详情
-- [ ] `GET /api/v1/statistic_info_charts` — 统计图表
-- [ ] `GET /api/v1/daily_statistics/:id` — 每日统计
-- [ ] `GET /api/v1/block_statistics/:id` — 区块统计（源码标注 unused）
-- [ ] `GET /api/v1/epoch_statistics/:id` — Epoch 统计
-- [ ] `GET /api/v1/market_data` — 市场数据列表
-- [ ] `GET /api/v1/market_data/:id` — 市场数据详情
-- [ ] `GET /api/v1/distribution_data/:id` — 分布数据
-- [ ] `GET /api/v1/monetary_data/:id` — 货币数据
-- [ ] `GET /api/v2/monitors/daily_statistics` — 监控每日统计
-- [ ] `GET /api/v2/statistics/transaction_fees` — 交易手续费统计
-- [ ] `GET /api/v2/statistics/contract_resource_distributed` — 合约资源分布
+- [x] `GET /api/v1/external/stats/:id` — 外部统计详情
+- [x] `GET /api/v1/suggest_queries` — 搜索建议
+- [x] `GET /api/v1/statistics` — 统计列表（已记录小时缓存值与实时 Tip 不同截面的 expectedFailure；公开环境无可控重组状态夹具）
+- [x] `GET /api/v1/statistics/:id` — 统计详情（已记录首页缓存 Tip 与实时单指标、小时节点快照的 expectedFailure；公开环境未启用 Miner Ranking 事件）
+- [x] `GET /api/v1/nets` — 网络信息列表（已记录公开 RPC 负载均衡节点 ID 与 Explorer 缓存实例不同的 expectedFailure）
+- [x] `GET /api/v1/nets/:id` — 网络信息详情（公开环境不暴露四小时缓存过期控制，刷新分支按网络标记 oracle unavailable）
+- [x] `GET /api/v1/statistic_info_charts` — 统计图表（已记录主网与测试网公开接口均返回 HTTP 500 的 expectedFailure）
+- [x] `GET /api/v1/daily_statistics/:id` — 每日统计（公开 RPC/Indexer 不提供封闭日历史状态与缓存版本控制，相应复算子测试按网络标记 oracle unavailable）
+- [ ] `GET /api/v1/block_statistics/:id` — 区块统计（阻塞：唯一评审行 `HIST-STATS-RPC-08` 含待确认，源码标注 unused）
+- [x] `GET /api/v1/epoch_statistics/:id` — Epoch 统计
+- [x] `GET /api/v1/market_data` — 市场数据列表（已记录首页与详情独立缓存导致 Circulating Supply 分叉的 expectedFailure）
+- [x] `GET /api/v1/market_data/:id` — 市场数据详情（公开环境无历史释放边界、未生成 DAO 利息聚合与原子漏洞奖励余额快照，相应子测试按网络标记 oracle unavailable）
+- [x] `GET /api/v1/distribution_data/:id` — 分布数据（90 日测试网公开查询超时，完整 7/90 日 RPC 窗口按网络标记 oracle unavailable；未实现 Checkpoint 行保持待确认未自动化）
+- [x] `GET /api/v1/monetary_data/:id` — 货币数据（已记录 Real Inflation 使用未截断内部序列、与返回序列相减语义相差 `1e-8` 的 expectedFailure；年数边界待确认行未自动化）
+- [x] `GET /api/v2/monitors/daily_statistics` — 监控每日统计（已记录系统时区与 Rails `Beijing` 时区不一致导致昨日记录返回 `error` 的 expectedFailure；陈旧分支当前无公开夹具）
+- [x] `GET /api/v2/statistics/transaction_fees` — 交易手续费统计（已记录小时缓存落后实时索引数百万 ID、UTC 日桶返回 21 条而非 20 条的 expectedFailure）
+- [x] `GET /api/v2/statistics/contract_resource_distributed` — 合约资源分布（公开 RPC/Indexer 无原子全局合约关联计数快照，相应全量复算按网络标记 oracle unavailable）
 
 ## xyl：Portfolio + Fiber（20）
 
-- [ ] `POST /api/v2/portfolio/sessions` — 创建 Portfolio 会话
-- [ ] `PATCH /api/v2/portfolio/user` — 更新 Portfolio 用户
-- [ ] `PUT /api/v2/portfolio/user` — 更新 Portfolio 用户
-- [ ] `GET /api/v2/portfolio/statistics` — Portfolio 统计
-- [ ] `POST /api/v2/portfolio/addresses` — 添加 Portfolio 地址
-- [ ] `GET /api/v2/portfolio/udt_accounts` — Portfolio UDT 账户
-- [ ] `GET /api/v2/portfolio/ckb_transactions` — Portfolio 交易列表
-- [ ] `GET /api/v2/portfolio/ckb_transactions/download_csv` — 导出 Portfolio 交易 CSV
-- [ ] `GET /api/v2/fiber/peers` — Fiber Peer 列表
-- [ ] `POST /api/v2/fiber/peers` — 创建/测试 Fiber Peer 连接
-- [ ] `GET /api/v2/fiber/peers/:peer_id` — Fiber Peer 详情
-- [ ] `GET /api/v2/fiber/channels/:channel_id` — Fiber Channel 详情
-- [ ] `GET /api/v2/fiber/graph_nodes` — Fiber Graph Node 列表
-- [ ] `GET /api/v2/fiber/graph_nodes/addresses` — Fiber Graph Node 地址列表
-- [ ] `GET /api/v2/fiber/graph_nodes/:node_id` — Fiber Graph Node 详情
-- [ ] `GET /api/v2/fiber/graph_nodes/:node_id/graph_channels` — 节点关联 Channel
-- [ ] `GET /api/v2/fiber/graph_nodes/:node_id/transactions` — 节点关联交易
-- [ ] `GET /api/v2/fiber/graph_channels` — Fiber Graph Channel 列表
-- [ ] `GET /api/v2/fiber/statistics` — Fiber 统计列表
-- [ ] `GET /api/v2/fiber/statistics/:id` — Fiber 统计详情
+- [x] `POST /api/v2/portfolio/sessions` — 创建 Portfolio 会话（已记录显式 `pub_key` 绕过其与签名匹配校验的 expectedFailure；签名重放语义待确认行未自动化）
+- [x] `PATCH /api/v2/portfolio/user` — 更新 Portfolio 用户（公开环境无服务端签名密钥，过期及不存在 UUID 的有效 JWT 子场景按网络标记 oracle unavailable）
+- [x] `PUT /api/v2/portfolio/user` — 更新 Portfolio 用户（公开环境无服务端签名密钥，过期及不存在 UUID 的有效 JWT 子场景按网络标记 oracle unavailable）
+- [x] `GET /api/v2/portfolio/statistics` — Portfolio 统计（已记录 expectedFailure：含非 DAO 地址时 `unclaimed_compensation` 为 NULL，聚合与正确 `latest_address` 重试均返回 HTTP 500）
+- [x] `POST /api/v2/portfolio/addresses` — 添加 Portfolio 地址（已记录 expectedFailure：含非 DAO 地址的成员确认受统计 HTTP 500 影响；异网混合批次错误返回 204；用户 A 的统计和交易列表返回 HTTP 500）
+- [x] `GET /api/v2/portfolio/udt_accounts` — Portfolio UDT 账户（已记录 expectedFailure：默认 sUDT 查询把 nil 当发布状态而返回空数组；四类 NFT 地址聚合返回 HTTP 500）
+- [x] `GET /api/v2/portfolio/ckb_transactions` — Portfolio 交易列表（已记录 expectedFailure：两网默认、哈希、地址、排序和分页查询均在序列化前返回 HTTP 500）
+- [x] `GET /api/v2/portfolio/ckb_transactions/download_csv` — 导出 Portfolio 交易 CSV（已记录 expectedFailure：畸形数值范围未返回参数错误而是 HTTP 500；有效高度/时间闭区间与 RPC 精确一致）
+- [x] `GET /api/v2/fiber/peers` — Fiber Peer 列表（两网独立 live test 通过；主网登记 RPC 为不可连接回环地址、测试网无配置 Peer，对应 Fiber oracle 子测试按网络 skip）
+- [x] `POST /api/v2/fiber/peers` — 创建/测试 Fiber Peer 连接（无受控可写 Fiber RPC 时成功创建/幂等场景按网络 skip；缺失、畸形和不可连接地址的无副作用错误场景两网通过）
+- [x] `GET /api/v2/fiber/peers/:peer_id` — Fiber Peer 详情（未知 Peer 与主网已知 Peer 重试通过；主网登记上游不可连接、测试网无配置 Peer，RPC 对照按网络 skip；同步时效待确认行未自动化）
+- [x] `GET /api/v2/fiber/channels/:channel_id` — Fiber Channel 详情（未知 Channel 两网通过；两网无已同步本地 Channel，身份、余额、Peer 方向及成功重试按网络 skip；待确认行未自动化）
+- [x] `GET /api/v2/fiber/graph_nodes` — Fiber Graph Node 列表（测试网软删除 Node/Channel 历史边界通过；无公开 Fiber Graph RPC URL 时活动快照成员与字段对照按网络 skip）
+- [x] `GET /api/v2/fiber/graph_nodes/addresses` — Fiber Graph Node 地址列表（测试网活动 Node、上游地址及未关闭 Channel 去重连接关系通过；主网无活动 Graph Node 按网络 skip）
+- [x] `GET /api/v2/fiber/graph_nodes/:node_id` — Fiber Graph Node 详情（测试网活动/历史 Node 聚合和三条未知 Node 路由恢复通过；主网无 Node 夹具按网络 skip）
+- [x] `GET /api/v2/fiber/graph_nodes/:node_id/graph_channels` — 节点关联 Channel（测试网节点的活动/已关闭/UDT Channel 历史、Funding OutPoint 与 CKB RPC、筛选边界及分页通过；主网无混合 Channel 夹具按网络 skip）
+- [x] `GET /api/v2/fiber/graph_nodes/:node_id/transactions` — 节点关联交易（测试网事件成员、筛选、排序、分页及 CKB 交易/区块对照通过；已记录关闭事件复用开放区块时间的 expectedFailure；主网无混合 Channel 夹具按网络 skip）
+- [x] `GET /api/v2/fiber/graph_channels` — Fiber Graph Channel 列表（测试网活动成员、关闭/地址筛选、分页、Funding OutPoint、UDT 及关闭消费对照通过；已记录 Graph CKB capacity 不等于 funding 输出容量的 expectedFailure；主网无活动 Channel 夹具按网络 skip；`status=open` 待确认行未自动化）
+- [x] `GET /api/v2/fiber/statistics` — Fiber 统计列表（两网最近 7 日窗口、活动 Node/Channel 数与容量和通过；已记录双向费率均值除数及流动性按两端重复计数的 expectedFailure；两网无不足 7/14 条历史夹具，相应子测试按网络 skip；精度待确认行未自动化）
+- [x] `GET /api/v2/fiber/statistics/:id` — Fiber 统计详情（两网四个合法 indicator 的 14 日窗口、字段投影、字符串值、倒序及与列表重叠点一致性通过；无效 indicator 与非整数精度待确认行未自动化）
 
 ## gp：路由审计（29）
 
-- [ ] `GET /api/v2/ckb_transactions` — V2 交易列表 [ROUTE_ONLY]
-- [ ] `GET /api/v2/ckb_transactions/:id` — V2 交易详情 [ROUTE_ONLY]
-- [ ] `GET /api/v2/transactions` — REST 交易列表 [ROUTE_ONLY]
-- [ ] `POST /api/v2/transactions` — REST 创建交易 [ROUTE_ONLY]
-- [ ] `GET /api/v2/transactions/new` — REST 新建交易表单 [ROUTE_ONLY]
-- [ ] `GET /api/v2/transactions/:id` — REST 交易详情 [ROUTE_ONLY]
-- [ ] `GET /api/v2/transactions/:id/edit` — REST 编辑交易表单 [ROUTE_ONLY]
-- [ ] `PATCH /api/v2/transactions/:id` — REST 更新交易 [ROUTE_ONLY]
-- [ ] `PUT /api/v2/transactions/:id` — REST 更新交易 [ROUTE_ONLY]
-- [ ] `DELETE /api/v2/transactions/:id` — REST 删除交易 [ROUTE_ONLY]
-- [ ] `POST /api/v2/nft/collections` — 创建 NFT 集合 [ROUTE_ONLY]
-- [ ] `GET /api/v2/nft/collections/new` — NFT 集合新建表单 [ROUTE_ONLY]
-- [ ] `GET /api/v2/nft/collections/:id/edit` — NFT 集合编辑表单 [ROUTE_ONLY]
-- [ ] `PATCH /api/v2/nft/collections/:id` — 更新 NFT 集合 [ROUTE_ONLY]
-- [ ] `PUT /api/v2/nft/collections/:id` — 更新 NFT 集合 [ROUTE_ONLY]
-- [ ] `DELETE /api/v2/nft/collections/:id` — 删除 NFT 集合 [ROUTE_ONLY]
-- [ ] `POST /api/v2/nft/collections/:collection_id/items` — 创建 NFT Item [ROUTE_ONLY]
-- [ ] `GET /api/v2/nft/collections/:collection_id/items/new` — NFT Item 新建表单 [ROUTE_ONLY]
-- [ ] `GET /api/v2/nft/collections/:collection_id/items/:id/edit` — NFT Item 编辑表单 [ROUTE_ONLY]
-- [ ] `PATCH /api/v2/nft/collections/:collection_id/items/:id` — 更新 NFT Item [ROUTE_ONLY]
-- [ ] `PUT /api/v2/nft/collections/:collection_id/items/:id` — 更新 NFT Item [ROUTE_ONLY]
-- [ ] `DELETE /api/v2/nft/collections/:collection_id/items/:id` — 删除 NFT Item [ROUTE_ONLY]
-- [ ] `GET /api/v2/nft/cota/nft_classes` — CoTA NFT Class 列表 [NAMESPACE_MISMATCH]
-- [ ] `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens` — CoTA Token 列表 [NAMESPACE_MISMATCH]
-- [ ] `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens/:id/claimed` — CoTA Token 领取状态 [NAMESPACE_MISMATCH]
-- [ ] `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens/:id/sender` — CoTA Token 发送者 [NAMESPACE_MISMATCH]
-- [ ] `GET /api/v2/nft/cota/transactions` — CoTA 交易列表 [NAMESPACE_MISMATCH]
-- [ ] `GET /api/v2/nft/cota/issuers/:id` — CoTA Issuer 详情 [NAMESPACE_MISMATCH]
-- [ ] `GET /api/v2/nft/cota/issuers/:id/minted` — CoTA Issuer 铸造记录 [NAMESPACE_MISMATCH]
+- [x] `GET /api/v2/ckb_transactions` — V2 交易列表 [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/ckb_transactions/:id` — V2 交易详情 [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/transactions` — REST 交易列表 [ROUTE_ONLY]（不测试）
+- [x] `POST /api/v2/transactions` — REST 创建交易 [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/transactions/new` — REST 新建交易表单 [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/transactions/:id` — REST 交易详情 [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/transactions/:id/edit` — REST 编辑交易表单 [ROUTE_ONLY]（不测试）
+- [x] `PATCH /api/v2/transactions/:id` — REST 更新交易 [ROUTE_ONLY]（不测试）
+- [x] `PUT /api/v2/transactions/:id` — REST 更新交易 [ROUTE_ONLY]（不测试）
+- [x] `DELETE /api/v2/transactions/:id` — REST 删除交易 [ROUTE_ONLY]（不测试）
+- [x] `POST /api/v2/nft/collections` — 创建 NFT 集合 [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/nft/collections/new` — NFT 集合新建表单 [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/nft/collections/:id/edit` — NFT 集合编辑表单 [ROUTE_ONLY]（不测试）
+- [x] `PATCH /api/v2/nft/collections/:id` — 更新 NFT 集合 [ROUTE_ONLY]（不测试）
+- [x] `PUT /api/v2/nft/collections/:id` — 更新 NFT 集合 [ROUTE_ONLY]（不测试）
+- [x] `DELETE /api/v2/nft/collections/:id` — 删除 NFT 集合 [ROUTE_ONLY]（不测试）
+- [x] `POST /api/v2/nft/collections/:collection_id/items` — 创建 NFT Item [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/nft/collections/:collection_id/items/new` — NFT Item 新建表单 [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/nft/collections/:collection_id/items/:id/edit` — NFT Item 编辑表单 [ROUTE_ONLY]（不测试）
+- [x] `PATCH /api/v2/nft/collections/:collection_id/items/:id` — 更新 NFT Item [ROUTE_ONLY]（不测试）
+- [x] `PUT /api/v2/nft/collections/:collection_id/items/:id` — 更新 NFT Item [ROUTE_ONLY]（不测试）
+- [x] `DELETE /api/v2/nft/collections/:collection_id/items/:id` — 删除 NFT Item [ROUTE_ONLY]（不测试）
+- [x] `GET /api/v2/nft/cota/nft_classes` — CoTA NFT Class 列表 [NAMESPACE_MISMATCH]（不测试）
+- [x] `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens` — CoTA Token 列表 [NAMESPACE_MISMATCH]（不测试）
+- [x] `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens/:id/claimed` — CoTA Token 领取状态 [NAMESPACE_MISMATCH]（不测试）
+- [x] `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens/:id/sender` — CoTA Token 发送者 [NAMESPACE_MISMATCH]（不测试）
+- [x] `GET /api/v2/nft/cota/transactions` — CoTA 交易列表 [NAMESPACE_MISMATCH]（不测试）
+- [x] `GET /api/v2/nft/cota/issuers/:id` — CoTA Issuer 详情 [NAMESPACE_MISMATCH]（不测试）
+- [x] `GET /api/v2/nft/cota/issuers/:id/minted` — CoTA Issuer 铸造记录 [NAMESPACE_MISMATCH]（不测试）

@@ -1,5 +1,9 @@
+- model: grok-4.6 | cases: V2-NODE-VERSIONS-RPC-04 | feedback: cellbase 版本串只要和ckb交易里的信息对的上就行
+- model: grok-4.6 | cases: V2-NODE-VERSIONS-RPC-01,V2-NODE-VERSIONS-RPC-02,V2-NODE-VERSIONS-RPC-03,V2-NODE-VERSIONS-RPC-04,V2-NODE-VERSIONS-RPC-05,V2-NODE-VERSIONS-RPC-06 | feedback: 确认
 - model: gpt-5.6 | cases: BLOCKS-RPC-02 | feedback: BLOCKS-RPC-02 :允许落后5个block 以内，其他没什么问题
 - model: gpt-5.6 | cases: BLOCKS-CSV-RPC-06 | feedback: 那调整用例评审，并调整用例
 - model: gpt-5.6 | cases: CELL-INPUT-LOCK-RPC-01,CELL-INPUT-LOCK-RPC-02,CELL-INPUT-LOCK-RPC-03 | feedback: 场景好像都是合法的场景，没有报错的场景
 - model: gpt-5.6 | cases: CELL-INPUT-LOCK-RPC-07,CELL-INPUT-LOCK-RPC-08 | feedback: 不用关注Header
 - model: gpt-5.6 | cases: CELL-INPUT-LOCK-RPC-04,CELL-INPUT-LOCK-RPC-05,CELL-INPUT-LOCK-RPC-06 | feedback: 那调整用例以实际返回为准
+- model: gpt-5.6 | cases: v1-cell-content automation files | feedback: 这些用例不能合并在一起吗？毕竟测试点都放在一起了。
+- model: gpt-5.6 | cases: V1 Cell content review structure | feedback: 这些用例都独立吗,如果都独立的话,就直接拆成N个测试点文件好了

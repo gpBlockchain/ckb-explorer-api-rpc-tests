@@ -27,10 +27,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  correctness:
-    name: Unit, mapping, and live correctness
+  unit-and-map:
+    name: Unit tests and TEST-MAP
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 10
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -46,17 +46,33 @@ jobs:
           RUN_LIVE_RPC_CORRECTNESS: "0"
       - name: Check TEST-MAP references
         run: python scripts/check_test_map.py --root .
+
+  live:
+    name: Live ${{ matrix.area }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        area:
+          - chain_data
+          - address_dao
+          - contract_script
+          - token_udt
+          - nft
+          - rgb_bitcoin
+          - statistics_discovery
+          - portfolio
+          - fiber
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
       - name: Compare Explorer API with same-network CKB RPC
-        run: >-
-          python -m unittest
-          tests.chain_data.test_v1_blocks_index
-          tests.chain_data.test_v1_blocks_show
-          tests.chain_data.test_v1_blocks_download_csv
-          tests.chain_data.test_v1_block_transactions_show
-          tests.chain_data.test_v1_transactions_index
-          tests.chain_data.test_v1_transactions_show
-          tests.chain_data.test_v1_transactions_query
-          -v
+        run: python -m unittest discover -s tests/${{ matrix.area }} -t . -p 'test_*.py' -v
         working-directory: suites/ckb-explorer-api-rpc-correctness
         env:
           PYTHONPATH: src

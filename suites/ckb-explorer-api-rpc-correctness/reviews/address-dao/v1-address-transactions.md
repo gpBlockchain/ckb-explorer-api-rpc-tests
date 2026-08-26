@@ -46,9 +46,13 @@
 | `ADDR-TX-RPC-28` | 一笔地址交易从 pending 转为 committed，且 Explorer 已同步包含它的规范区块，在状态转换前后跨缓存窗口查询两个列表 | 稳定 pending 阶段只出现在 pending 列表；确认并经过最长 10 秒新鲜加 10 秒 stale-while-revalidate 窗口后从 pending 消失并出现在已提交列表，两个列表均不重复；重组或池变化时该轮事实基准不可用 | 同一交易长期同时显示两种状态、确认后仍滞留 pending 或从两端丢失 | P0 |
 | `ADDR-TX-RPC-29` | 待处理池查询期间 RPC 传输失败、目标交易/输入引用暂不可取、前后池快照不同或观测到交易状态变化 | 该网络本次 pending 事实基准明确记为不可用并保留原因，另一个网络仍独立执行；不会把不可验证状态报告为 API 字段不一致 | 上游瞬时波动制造伪失败、一个网络故障掩盖另一个网络结果 | P1 |
 | `ADDR-TX-RPC-30` | 以独立确认映射到多个 CKB Lock Script 的 Bitcoin 地址查询稳定池中的待处理交易 | 待确认：响应是否应合并全部映射 Lock Script 的 pending 交易、按哈希去重并把 `income` 汇总到 Bitcoin 地址，还是 pending 接口只正式支持 CKB 地址/Lock Script Hash；当前实现会查询多个映射但每笔 `income` 只取一个关联账户 | Bitcoin pending 只查首个映射、重复交易、随机选择一个地址净变化或接口能力不一致 | P1 |
+| `ADDR-TX-RPC-31` | 在公开主网和测试网分别查询一个作为已确认 Cellbase 输出 Lock Script 的矿工地址，并用 RPC 核对对应区块的 Cellbase 交易 | 地址交易集合包含该 Cellbase 且只出现一次；`is_cellbase=true`，交易哈希、区块高度、时间戳、完整输出数量和输出预览与 RPC 一致，输入展示为唯一系统 Cellbase 输入，`income` 等于该地址在本交易全部输出容量之和且不减去系统输入 | 地址交易索引遗漏 Cellbase、把系统输入当普通 previous output、奖励输出错位或矿工地址收入符号错误 | P1 |
+| `ADDR-TX-RPC-32` | 在公开主网和测试网分别为包含已确认 Cellbase 交易的矿工地址下载地址交易 CSV，并用 RPC 核对该 Cellbase 输出 | CSV 包含该交易且只生成一条目标地址的 CKB 行：交易哈希、区块高度、毫秒时间戳和 UTC 日期与 RPC 一致，`Method=PAYMENT RECEIVED`、`Token In=/`，`Token Out` 与 `Token Balance Change` 均等于该地址所有 Cellbase 输出容量之和按 `10^8` 转换后的 CKB 值，`TxnFee(CKB)` 为零；系统输入不产生负金额或额外行 | Cellbase 被 CSV 漏掉、系统输入被当普通支出、矿工奖励重复出行、手续费或收款方向错误 | P1 |
 
 ## 本轮需要确认
 
 - `ADDR-TX-RPC-19`：地址交易 CSV 对 Bitcoin 地址的正式契约，是合并全部映射 CKB 地址，还是只接受 CKB 地址/Lock Script Hash 并明确报错。
 - `ADDR-TX-RPC-26`：地址 pending 列表的可公开验证稳定排序键，以及未知 `sort` 值的错误或回退语义。
 - `ADDR-TX-RPC-30`：地址 pending 列表对 Bitcoin 多映射的正式契约，以及 `income` 是按各 CKB 地址分别表示还是按 Bitcoin 地址汇总。
+- 请确认新增 `ADDR-TX-RPC-31` 可作为已提交地址交易列表展示 Cellbase 交易、系统输入和矿工地址收入的评审依据；本轮只补充测试点，不进入自动化门禁。
+- 请确认新增 `ADDR-TX-RPC-32` 可作为地址交易 CSV 导出 Cellbase 奖励、零手续费和单边收款方向的评审依据；本轮只补充测试点，不进入自动化门禁。

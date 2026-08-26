@@ -1,7 +1,12 @@
 from __future__ import annotations
 
+import hashlib
+import re
 from dataclasses import dataclass
 from typing import Any, Mapping
+
+
+_CELLBASE_NODE_VERSION = re.compile(rb"\d+\.\d+\.\d+")
 
 
 BECH32_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
@@ -119,6 +124,23 @@ def parse_cellbase_message(witness: str) -> str:
     if length != len(message):
         raise ValueError("cellbase message length is invalid")
     return f"0x{message.hex()}"
+
+
+def cellbase_node_version(witness: object) -> str | None:
+    if not isinstance(witness, str) or not witness.startswith("0x"):
+        return None
+    try:
+        message = parse_cellbase_message(witness)
+        payload = bytes.fromhex(message[2:])
+    except ValueError:
+        try:
+            payload = bytes.fromhex(witness[2:])
+        except ValueError:
+            return None
+    matched = _CELLBASE_NODE_VERSION.search(payload)
+    if matched is None:
+        return None
+    return matched.group().decode("ascii")
 
 
 def _convert_bits(payload: bytes) -> list[int]:
@@ -268,6 +290,36 @@ def _hex_bytes(value: object, field: str) -> bytes:
         return bytes.fromhex(value[2:])
     except ValueError as error:
         raise ValueError(f"{field} contains invalid hexadecimal bytes") from error
+
+
+def ckb_script_hash(script: Mapping[str, Any]) -> str:
+    code_hash = _hex_bytes(script.get("code_hash"), "script.code_hash")
+    args = _hex_bytes(script.get("args"), "script.args")
+    if len(code_hash) != 32:
+        raise ValueError("script.code_hash must contain 32 bytes")
+    hash_type = script.get("hash_type")
+    hash_type_byte = {"data": 0, "type": 1, "data1": 2, "data2": 4}.get(hash_type)
+    if hash_type_byte is None:
+        raise ValueError(f"unsupported script.hash_type: {hash_type!r}")
+
+    first_field_offset = 16
+    second_field_offset = first_field_offset + len(code_hash)
+    third_field_offset = second_field_offset + 1
+    total_size = third_field_offset + 4 + len(args)
+    molecule = b"".join(
+        (
+            total_size.to_bytes(4, "little"),
+            first_field_offset.to_bytes(4, "little"),
+            second_field_offset.to_bytes(4, "little"),
+            third_field_offset.to_bytes(4, "little"),
+            code_hash,
+            bytes((hash_type_byte,)),
+            len(args).to_bytes(4, "little"),
+            args,
+        )
+    )
+    digest = hashlib.blake2b(molecule, digest_size=32, person=b"ckb-default-hash")
+    return f"0x{digest.hexdigest()}"
 
 
 def _script_occupied_bytes(script: object, field: str) -> int:

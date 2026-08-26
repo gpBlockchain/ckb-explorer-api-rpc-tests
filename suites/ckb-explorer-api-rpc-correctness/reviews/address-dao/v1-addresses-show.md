@@ -39,6 +39,7 @@
 | `ADDRESS-RPC-19` | 某地址的已确认 Live Cell 状态变化且 Explorer 已同步到对应区块后，在变更前后重复查询地址详情 | 允许共享缓存先返回最多 10 秒新鲜旧响应并在随后最多 10 秒 stale-while-revalidate 窗口内完成刷新；窗口结束后的 `balance`、`balance_occupied`、`live_cells_count` 和 `transactions_count` 与新链状态一致 | 缓存长期返回旧余额、不同字段跨版本拼接或新状态永远不触发重验证 | P1 |
 | `ADDRESS-RPC-20` | 在公开主网和测试网分别查询符合多签时间锁格式、可由当前 tip Epoch 判断锁定状态的地址 | `lock_info` 的锁定状态、目标 Epoch number/index 和预计解锁时间与 Lock Script args 及同网络 tip Epoch 推导值一致；普通 Lock Script 的 `lock_info` 为 `null` | Since 解码、Epoch 比例换算、网络脚本识别或锁定状态判断错误 | P2 |
 | `ADDRESS-RPC-21` | 当存在可审计的矿工地址累计事实基准时，在对应网络查询该地址详情 | `mined_blocks_count` 等于规范链上 Cellbase miner Lock Script 解析后归属该地址的累计区块数，重组失效区块不计入；缺少可审计累计基准时记录为事实基准不可用 | 矿工归属错误、重组区块未回滚或累计计数停止更新 | P2 |
+| `ADDRESS-RPC-22` | 在公开主网和测试网分别直接查询一个已由独立映射事实确认绑定 Bitcoin 地址的 CKB 地址，以及一个确认未绑定 Bitcoin 地址的 CKB 地址 | 已绑定地址资源的 `bitcoin_address_hash` 精确等于映射事实中的本网络 Bitcoin 地址，未绑定地址明确返回 `bitcoin_address_hash: null`；该字段不会改变 CKB `address_hash`、Lock Script 或链上状态字段，也不会串入其他地址的映射 | 只有 Bitcoin 地址反查分支能显示映射、直接查询 CKB 地址遗漏绑定关系，或复用错误映射导致跨地址、跨网络串线 | P1 |
 
 ## 本轮需要确认
 
@@ -49,3 +50,4 @@
 - `ADDRESS-RPC-12`：`average_deposit_time` 后台计算相对观测时间允许的最大陈旧窗口。
 - `ADDRESS-RPC-16`：异网络 HRP 的 CKB 地址是否应按等价 Lock Script 接受，还是按网络边界拒绝。
 - `ADDRESS-RPC-21`：公开环境缺少可审计的全链累计矿工基准时，是否保留为非持续执行用例。
+- 请确认新增 `ADDRESS-RPC-22` 可作为直接查询 CKB 地址时验证 Bitcoin 映射字段及未绑定空值的评审依据；本轮只补充测试点，不进入自动化门禁。

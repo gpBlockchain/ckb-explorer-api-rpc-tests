@@ -8,6 +8,8 @@ from ckb_rpc_correctness.ckb import (
     LockScript,
     block_cycles,
     calculate_live_cell_changes,
+    cellbase_node_version,
+    ckb_script_hash,
     compact_to_difficulty,
     ckb2021_address,
     decode_epoch,
@@ -30,6 +32,10 @@ CELLBASE_WITNESS = (
 )
 
 
+def _cellbase_witness_with_message(message: bytes) -> str:
+    return "0x" + message.hex()
+
+
 class CkbDerivationTests(unittest.TestCase):
     def test_decode_hex_int_preserves_large_values(self) -> None:
         self.assertEqual(2**80 + 123, decode_hex_int(hex(2**80 + 123), "value"))
@@ -44,6 +50,24 @@ class CkbDerivationTests(unittest.TestCase):
             ckb2021_address(lock, "ckt"),
         )
         self.assertEqual("0x12345678", parse_cellbase_message(CELLBASE_WITNESS))
+        self.assertIsNone(cellbase_node_version(CELLBASE_WITNESS))
+
+    def test_cellbase_node_version_reads_version_from_transaction_message(self) -> None:
+        witness = (
+            "0x750000000c0000005500000049000000100000003000000031000000"
+            "9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"
+            "01140000007164f48d7a5bf2298166f8d81b81ea4e908e16ad1c000000"
+            "302e3130332e3020286537373133386520323032322d30342d313129"
+        )
+        self.assertEqual("0.103.0", cellbase_node_version(witness))
+        self.assertEqual(
+            "10.12.13",
+            cellbase_node_version(_cellbase_witness_with_message(b"ckb-cli 10.12.13 (deadbeef)")),
+        )
+        self.assertEqual(
+            "0.103.0",
+            cellbase_node_version(_cellbase_witness_with_message(b"0.103.0-rc1 (abc1234)")),
+        )
 
     def test_ckb2021_mainnet_prefix_uses_same_script_payload(self) -> None:
         lock = LockScript(
@@ -52,6 +76,18 @@ class CkbDerivationTests(unittest.TestCase):
             "0x36c329ed630d6ce750712a477543672adab57f4c",
         )
         self.assertTrue(ckb2021_address(lock, "ckb").startswith("ckb1"))
+
+    def test_ckb_script_hash_uses_molecule_serialization_and_personalized_blake2b(self) -> None:
+        script = {
+            "args": "0xab21bfe2bf85927bb42faaf3006a355222e24d5ea1d4dec0e62f53a8e0c04690",
+            "code_hash": "0xfef1d086d9f74d143c60bf03bd04bab29200dbf484c801c72774f2056d4c6718",
+            "hash_type": "type",
+        }
+
+        self.assertEqual(
+            "0x1ca35cb5fda4bd542e71d94a6d5f4c0d255d6d6fba73c41cf45d2693e59b3072",
+            ckb_script_hash(script),
+        )
 
     def test_live_cell_changes_counts_cellbase_as_one(self) -> None:
         block = {
