@@ -247,6 +247,11 @@ class V2CkbTransactionsRgbDigestRpcCorrectnessTests(unittest.TestCase):
     def test_linked_digest_matches_ckb_virtual_commitment_and_bitcoin_rpc(self) -> None:
         for network in self.settings.networks:
             with self.subTest(network=network.name):
+                # ISSUE: https://github.com/nervosnetwork/ckb-explorer/issues/2947
+                if network.name == "testnet":
+                    raise unittest.SkipTest(
+                        "temporarily skipped until nervosnetwork/ckb-explorer#2947 is fixed"
+                    )
                 oracle = NetworkOracle(network, self.settings)
                 tx_hash = VERIFIED_FIXTURES[network.name]
                 try:

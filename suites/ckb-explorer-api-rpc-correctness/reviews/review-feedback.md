@@ -7,3 +7,5 @@
 - model: gpt-5.6 | cases: CELL-INPUT-LOCK-RPC-04,CELL-INPUT-LOCK-RPC-05,CELL-INPUT-LOCK-RPC-06 | feedback: 那调整用例以实际返回为准
 - model: gpt-5.6 | cases: v1-cell-content automation files | feedback: 这些用例不能合并在一起吗？毕竟测试点都放在一起了。
 - model: gpt-5.6 | cases: V1 Cell content review structure | feedback: 这些用例都独立吗,如果都独立的话,就直接拆成N个测试点文件好了
+- model: gpt-5.6 | cases: UDT-HOURLY-RPC-05 | feedback: 3. UDT：确认“空样本”已经产生统计数据 是可以接受的，调整用例吧
+- model: gpt-5.6 | cases: ECON-RPC-01 | feedback: 那这个用例需要调整

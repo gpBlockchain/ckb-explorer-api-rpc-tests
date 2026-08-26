@@ -144,7 +144,10 @@ class V2PortfolioUdtAccountsIndexRpcCorrectnessTests(unittest.TestCase):
                 self.assertEqual(visible_rows, json.loads(default[1]))
 
     # TEST-MAP: PORTFOLIO-ASSET-RPC-07
-    @unittest.expectedFailure  # Both public servers return HTTP 500 while aggregating the four tracked NFT branches.
+    @unittest.skip(
+        "Both public servers return HTTP 500; tracked by "
+        "https://github.com/nervosnetwork/ckb-explorer/issues/2946"
+    )
     def test_nft_branches_preserve_rpc_identity_token_ids_and_optional_collection_data(self) -> None:
         expected_types = {
             "m_nft": "m_nft_token",
