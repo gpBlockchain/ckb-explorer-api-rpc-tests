@@ -45,6 +45,11 @@ def _raw_explorer_response(oracle: NetworkOracle, path: str) -> tuple[int, bytes
             if attempt < oracle.client.retries and (status == 429 or status >= 500):
                 time.sleep(0.2 * (attempt + 1))
                 continue
+            if status == 429 or status >= 500:
+                raise OracleUnavailable(
+                    f"{oracle.network.name} Explorer unavailable after {attempt + 1} attempts: "
+                    f"{path} returned HTTP {status}"
+                )
             return status, raw
         except (urllib.error.URLError, TimeoutError, socket.timeout, ConnectionError, OSError) as error:
             if attempt < oracle.client.retries:
