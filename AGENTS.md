@@ -24,14 +24,15 @@ Reviewers should need only one stable case ID and one self-contained row:
 
 | 用例 | 场景 | 预期结果 | 防止的问题 | 优先级 |
 | --- | --- | --- | --- | --- |
-| `AREA-01` | 提交有效请求 | 返回预期结果并产生一次预期副作用 | 正常请求失败或被重复处理 | P0 |
+| `AREA-01` | - [ ] 提交有效请求 | 返回预期结果并产生一次预期副作用 | 正常请求失败或被重复处理 | P0 |
 
 - The case ID is also the Test Point ID. Do not introduce separate module, function, coverage, or test-point ID chains.
+- Start each scenario cell with `- [ ]` when no matching `TEST-MAP` exists and `- [x]` when one exists; new cases start unchecked.
 - Keep each case on one physical Markdown row and describe concrete product behavior.
 - Use P0 for release-blocking core behavior, P1 for important failure, recovery, and boundary behavior, and P2 for lower-impact edges.
 - Preserve the case ID when correcting wording, expectations, or priority. Add an ID only for a new independently observable behavior.
 - Put `待确认：<decision>` in the expected-result cell when behavior is ambiguous and repeat the decision under `本轮需要确认`.
-- Do not store per-case proposal, approval, coverage, or automation statuses in review documents.
+- Do not store per-case proposal, approval, coverage, or automation statuses beyond the scenario checkbox.
 - Do not put test paths, implementation steps, source-evidence chains, run history, or mapping tables in the main case table.
 
 Before writing cases, internally consider core behavior, validation, state transitions, failure/recovery, caller trust, cross-component effects, ordering/replay, persistence/restart, compatibility, resource limits, and security-sensitive inputs. Emit only target-supported cases.
@@ -40,7 +41,7 @@ Before writing cases, internally consider core behavior, validation, state trans
 
 1. **Test-area map:** for a new area, update `reviews/README.md` with its responsibility, boundary, entry points, observables, and review-document path; present the map and stop.
 2. **Review cases:** create or revise one coherent review document from `templates/test-review.md`; present every new, deleted, or materially changed row and stop.
-3. **Automation:** change mapped tests only after explicit human confirmation of the current rows. Add the exact nearby comment `TEST-MAP: <CASE-ID>`, run focused tests, then run `python3 scripts/check_test_map.py`.
+3. **Automation:** change mapped tests only after explicit human confirmation of the current rows. Add the exact nearby comment `TEST-MAP: <CASE-ID>`, set the scenario checkbox to `- [x]`, run focused tests, then run `python3 scripts/check_test_map.py`.
 
 Existing unchanged reviewed rows remain eligible for implementation. Any new, deleted, or behavior-changing row reopens the review gate.
 
@@ -54,7 +55,7 @@ Existing unchanged reviewed rows remain eligible for implementation. Any new, de
 ## Maintenance
 
 - Read this file, the affected suite's `AGENTS.md` and local skill, the relevant review document, and mapped tests.
-- Find automation by searching for `TEST-MAP: <CASE-ID>`; do not maintain a separate mapping ledger.
+- Find automation by searching for `TEST-MAP: <CASE-ID>`; mirror that mapping with the scenario checkbox and do not maintain a separate mapping ledger.
 - Update an existing row in place when its behavior changes. Add or remove rows only when independently observable behavior is added or removed.
 - For PR analysis, translate each behavior change into affected review rows and the minimum test change for a concrete failure mode.
 - For every added or materially changed automated case, report why the case is needed and how its observable assertions prove the expected behavior.

@@ -137,36 +137,36 @@ class V1OmigaInscriptionsIndexRpcCorrectnessTests(unittest.TestCase):
                     first, first_meta = self._page(oracle, page=1, page_size=20)
                     second, second_meta = self._page(oracle, page=2, page_size=20)
                     combined, combined_meta = self._page(oracle, page=1, page_size=40)
+                    self.assertEqual(min(25, len(rows)), len(default))
+                    self.assertEqual(25, int(default_meta["page_size"]))
+                    self.assertEqual(first + second, combined[: len(first) + len(second)])
+                    self.assertEqual(first_meta["total"], second_meta["total"])
+                    self.assertEqual(first_meta["total"], combined_meta["total"])
+                    self.assertEqual(
+                        [row["id"] for row in default],
+                        sorted((row["id"] for row in default), key=int, reverse=True),
+                    )
+                    base_ids = {row["id"] for row in rows}
+                    for public, attribute in numeric_sort_fields:
+                        for direction in ("asc", "desc"):
+                            actual = self._all(oracle, sort=f"{public}.{direction}")
+                            if {row["id"] for row in actual} != base_ids:
+                                raise unittest.SkipTest(
+                                    f"{network.name} Omiga catalog changed while checking sort order"
+                                )
+                            values = [int(row.get(attribute) or 0) for row in actual]
+                            self.assertEqual(
+                                values,
+                                sorted(values, reverse=direction == "desc"),
+                            )
+                    for direction in ("asc", "desc"):
+                        actual, _meta = self._page(
+                            oracle, page=1, page_size=100, sort=f"mint_status.{direction}"
+                        )
+                        ranks = [status_rank[str(row["mint_status"])] for row in actual]
+                        self.assertEqual(ranks, sorted(ranks, reverse=direction == "desc"))
                 except OracleUnavailable as error:
                     raise unittest.SkipTest(str(error)) from error
-                self.assertEqual(min(25, len(rows)), len(default))
-                self.assertEqual(25, int(default_meta["page_size"]))
-                self.assertEqual(first + second, combined[: len(first) + len(second)])
-                self.assertEqual(first_meta["total"], second_meta["total"])
-                self.assertEqual(first_meta["total"], combined_meta["total"])
-                self.assertEqual(
-                    [row["id"] for row in default],
-                    sorted((row["id"] for row in default), key=int, reverse=True),
-                )
-                base_ids = {row["id"] for row in rows}
-                for public, attribute in numeric_sort_fields:
-                    for direction in ("asc", "desc"):
-                        actual = self._all(oracle, sort=f"{public}.{direction}")
-                        if {row["id"] for row in actual} != base_ids:
-                            raise unittest.SkipTest(
-                                f"{network.name} Omiga catalog changed while checking sort order"
-                            )
-                        values = [int(row.get(attribute) or 0) for row in actual]
-                        self.assertEqual(
-                            values,
-                            sorted(values, reverse=direction == "desc"),
-                        )
-                for direction in ("asc", "desc"):
-                    actual, _meta = self._page(
-                        oracle, page=1, page_size=100, sort=f"mint_status.{direction}"
-                    )
-                    ranks = [status_rank[str(row["mint_status"])] for row in actual]
-                    self.assertEqual(ranks, sorted(ranks, reverse=direction == "desc"))
 
 
 if __name__ == "__main__":

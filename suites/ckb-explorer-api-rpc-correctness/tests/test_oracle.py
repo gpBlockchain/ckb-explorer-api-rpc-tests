@@ -9,6 +9,42 @@ from ckb_rpc_correctness.settings import NetworkSettings, Settings
 
 
 class NetworkOracleTests(unittest.TestCase):
+    def test_reward_sample_skips_pending_maturity_boundary(self) -> None:
+        settings = Settings(
+            settings_file=Path("networks.json"),
+            run_live=False,
+            timeout_seconds=1,
+            transport_retries=0,
+            max_lag_blocks=5,
+            proposal_window=10,
+            list_page_size=100,
+            sample_search_pages=5,
+            rpc_batch_size=100,
+            networks=(),
+        )
+        network = NetworkSettings("mainnet", "https://explorer.invalid", "https://rpc.invalid", "ckb")
+        oracle = NetworkOracle(network, settings)
+        pending = {"number": "100", "reward": "1"}
+        issued = {"number": "99", "reward": "2"}
+        blocks = {
+            100: {"header": {"hash": "0x100"}},
+            99: {"header": {"hash": "0x99"}},
+        }
+        economic_state = {"miner_reward": {"primary": "0x1", "secondary": "0x1"}}
+        oracle._eligible_rows = Mock(return_value=[pending, issued])  # type: ignore[method-assign]
+        oracle.block = Mock(side_effect=lambda height: blocks[int(height)])  # type: ignore[method-assign]
+        oracle.detail_attributes = Mock(  # type: ignore[method-assign]
+            side_effect=lambda height: {"reward_status": "pending" if int(height) == 100 else "issued"}
+        )
+        oracle.economic_state = Mock(return_value=economic_state)  # type: ignore[method-assign]
+
+        sample, state = oracle.reward_sample()
+
+        self.assertEqual(99, sample.height)
+        self.assertIs(issued, sample.attributes)
+        self.assertIs(economic_state, state)
+        self.assertEqual([100, 99], [call.args[0] for call in oracle.detail_attributes.call_args_list])
+
     def test_completed_epoch_extrema_skips_epoch_with_unavailable_statistics(self) -> None:
         settings = Settings(
             settings_file=Path("networks.json"),

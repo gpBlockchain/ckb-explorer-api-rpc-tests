@@ -66,13 +66,16 @@ class V2ScriptsReferringCellsRpcCorrectnessTests(unittest.TestCase):
             raise OracleUnavailable(f"{oracle.network.name} RPC referring output is unavailable") from error
         out_point = {"tx_hash": row["tx_hash"], "index": hex(index)}
         live_cell = oracle.rpc_result("get_live_cell", [out_point, True])
+        if not isinstance(live_cell, dict):
+            raise OracleUnavailable(f"{oracle.network.name} RPC live-cell evidence is unavailable")
+        if live_cell.get("status") != "live":
+            raise OracleUnavailable(f"{oracle.network.name} referring Cell changed during observation")
         block = oracle.block_by_hash(status["block_hash"])
         header = block.get("header") if isinstance(block, dict) else None
         if not isinstance(output, dict) or not isinstance(output_data, str):
             raise OracleUnavailable(f"{oracle.network.name} RPC referring output is invalid")
-        if not isinstance(live_cell, dict) or not isinstance(header, dict):
+        if not isinstance(header, dict):
             raise OracleUnavailable(f"{oracle.network.name} RPC live-cell evidence is unavailable")
-        self.assertEqual("live", live_cell.get("status"))
         self.assertEqual("live", row["status"])
         self.assertIsNone(row["consumed_by_id"])
         self.assertIsNone(row["consumed_block_timestamp"])

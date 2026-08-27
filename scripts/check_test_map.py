@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report review-case to automated-test mappings from TEST-MAP comments."""
+"""Report TEST-MAP coverage and validate review scenario checkboxes."""
 
 from __future__ import annotations
 
@@ -11,7 +11,10 @@ from pathlib import Path
 
 
 CASE_TOKEN = r"[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-\d{2,}"
-REVIEW_ROW = re.compile(rf"^\|\s*`?(?P<case>{CASE_TOKEN})`?\s*\|")
+REVIEW_ROW = re.compile(
+    rf"^\|\s*`?(?P<case>{CASE_TOKEN})`?\s*\|\s*(?P<scenario>[^|]*)\|"
+)
+TASK_CHECKBOX = re.compile(r"^- \[(?P<state>[ xX])\](?:\s+|$)")
 TEST_MAP = re.compile(rf"\bTEST-MAP:\s*(?P<case>{CASE_TOKEN})\b")
 CODE_DIR_NAMES = {"tests", "benchmarks", "targets"}
 CODE_SUFFIXES = {
@@ -41,7 +44,7 @@ SKIP_DIRS = {".git", ".idea", ".pytest_cache", ".venv", "node_modules", "source"
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Compute automation coverage from review rows and TEST-MAP comments."
+        description="Compute TEST-MAP coverage and validate review scenario checkboxes."
     )
     parser.add_argument(
         "--root",
@@ -92,19 +95,32 @@ def code_files(root: Path) -> list[Path]:
         if is_skipped(directory, root):
             continue
         for path in directory.rglob("*"):
-            if path.is_file() and path.suffix.lower() in CODE_SUFFIXES and not is_skipped(path, root):
+            if (
+                path.is_file()
+                and path.suffix.lower() in CODE_SUFFIXES
+                and not is_skipped(path, root)
+            ):
                 files.add(path)
     return sorted(files)
 
 
-def collect_review_cases(root: Path) -> dict[str, list[str]]:
+def collect_review_cases(
+    root: Path,
+) -> tuple[dict[str, list[str]], dict[str, list[dict[str, object]]]]:
     found: dict[str, list[str]] = defaultdict(list)
+    checkboxes: dict[str, list[dict[str, object]]] = defaultdict(list)
     for path in review_files(root):
         for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
             match = REVIEW_ROW.match(line)
-            if match:
-                found[match.group("case")].append(location(path, number, root))
-    return dict(found)
+            if not match:
+                continue
+            case = match.group("case")
+            place = location(path, number, root)
+            checkbox = TASK_CHECKBOX.match(match.group("scenario").strip())
+            checked = None if checkbox is None else checkbox.group("state").lower() == "x"
+            found[case].append(place)
+            checkboxes[case].append({"location": place, "checked": checked})
+    return dict(found), dict(checkboxes)
 
 
 def collect_test_maps(root: Path) -> dict[str, list[str]]:
@@ -121,15 +137,34 @@ def collect_test_maps(root: Path) -> dict[str, list[str]]:
 
 
 def build_report(root: Path) -> dict[str, object]:
-    reviews = collect_review_cases(root)
+    reviews, checkboxes = collect_review_cases(root)
     mappings = collect_test_maps(root)
     review_ids = set(reviews)
     mapped_ids = set(mappings)
     automated = sorted(review_ids & mapped_ids)
     unautomated = sorted(review_ids - mapped_ids)
     orphan = sorted(mapped_ids - review_ids)
-    duplicate_reviews = {case: places for case, places in sorted(reviews.items()) if len(places) > 1}
-    multiple_mappings = {case: places for case, places in sorted(mappings.items()) if len(places) > 1}
+    duplicate_reviews = {
+        case: places for case, places in sorted(reviews.items()) if len(places) > 1
+    }
+    multiple_mappings = {
+        case: places for case, places in sorted(mappings.items()) if len(places) > 1
+    }
+    checkbox_mismatches: dict[str, list[dict[str, object]]] = {}
+    for case in sorted(review_ids):
+        expected = case in mapped_ids
+        mismatches = []
+        for entry in checkboxes[case]:
+            if entry["checked"] != expected:
+                mismatches.append(
+                    {
+                        "location": entry["location"],
+                        "expected_checked": expected,
+                        "observed_checked": entry["checked"],
+                    }
+                )
+        if mismatches:
+            checkbox_mismatches[case] = mismatches
     return {
         "root": str(root),
         "review_case_count": len(review_ids),
@@ -140,6 +175,7 @@ def build_report(root: Path) -> dict[str, object]:
         "orphan_mappings": orphan,
         "duplicate_review_ids": duplicate_reviews,
         "multiple_code_mappings": multiple_mappings,
+        "checkbox_mismatches": checkbox_mismatches,
         "review_locations": reviews,
         "mapping_locations": mappings,
     }
@@ -153,10 +189,28 @@ def print_human(report: dict[str, object]) -> None:
     orphan = report["orphan_mappings"]
     duplicate = report["duplicate_review_ids"]
     multiple = report["multiple_code_mappings"]
+    checkbox_mismatches = report["checkbox_mismatches"]
     print(f"unautomated: {', '.join(unautomated) if unautomated else 'none'}")
     print(f"orphan mappings: {', '.join(orphan) if orphan else 'none'}")
     print(f"duplicate review IDs: {', '.join(duplicate) if duplicate else 'none'}")
     print(f"cases with multiple code mappings: {', '.join(multiple) if multiple else 'none'}")
+    if checkbox_mismatches:
+        details = []
+        for case, entries in checkbox_mismatches.items():
+            for entry in entries:
+                expected = "checked" if entry["expected_checked"] else "unchecked"
+                observed_value = entry["observed_checked"]
+                observed = (
+                    "missing"
+                    if observed_value is None
+                    else ("checked" if observed_value else "unchecked")
+                )
+                details.append(
+                    f"{case} ({entry['location']}: expected {expected}, found {observed})"
+                )
+        print(f"checkbox mismatches: {', '.join(details)}")
+    else:
+        print("checkbox mismatches: none")
 
 
 def main() -> int:
@@ -169,7 +223,11 @@ def main() -> int:
         print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     else:
         print_human(report)
-    invalid = bool(report["orphan_mappings"] or report["duplicate_review_ids"])
+    invalid = bool(
+        report["orphan_mappings"]
+        or report["duplicate_review_ids"]
+        or report["checkbox_mismatches"]
+    )
     incomplete = bool(args.require_complete and report["unautomated"])
     return 1 if invalid or incomplete else 0
 

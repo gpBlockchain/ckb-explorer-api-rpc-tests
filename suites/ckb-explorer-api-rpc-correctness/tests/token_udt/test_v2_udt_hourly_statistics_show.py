@@ -10,7 +10,7 @@ from ckb_rpc_correctness.settings import load_settings
 from tests.token_udt.test_v1_xudts_snapshot import SNAPSHOT_XUDTS
 
 
-EMPTY_TESTNET_XUDT = "0xfc018309be6e28c216dd8b3ec2076437e93f36db46e366cdc941a7125c73eab7"
+PRE_METADATA_TESTNET_XUDT = "0xfc018309be6e28c216dd8b3ec2076437e93f36db46e366cdc941a7125c73eab7"
 
 
 class V2UdtHourlyStatisticsShowRpcCorrectnessTests(unittest.TestCase):
@@ -178,25 +178,23 @@ class V2UdtHourlyStatisticsShowRpcCorrectnessTests(unittest.TestCase):
                 self.assertEqual(holders, int(latest["holders_count"]))
 
     # TEST-MAP: UDT-HOURLY-RPC-05
-    def test_published_udt_created_after_latest_generation_has_empty_series(self) -> None:
+    def test_published_udt_retains_statistics_older_than_its_metadata_record(self) -> None:
         network = next(item for item in self.settings.networks if item.name == "testnet")
         oracle = NetworkOracle(network, self.settings)
         try:
-            detail = oracle.explorer_json(f"/v1/xudts/{EMPTY_TESTNET_XUDT}")
+            detail = oracle.explorer_json(f"/v1/xudts/{PRE_METADATA_TESTNET_XUDT}")
             data = detail.get("data") if isinstance(detail, dict) else None
             attributes = data.get("attributes") if isinstance(data, dict) else None
-            global_rows = oracle.explorer_json("/v2/udt_hourly_statistics").get("data")
-            rows = self._rows(oracle, EMPTY_TESTNET_XUDT)
-            if not isinstance(attributes, dict) or not isinstance(global_rows, list) or not global_rows:
-                raise OracleUnavailable("testnet empty statistic fixture is unavailable")
+            rows = self._rows(oracle, PRE_METADATA_TESTNET_XUDT)
+            if not isinstance(attributes, dict) or not rows:
+                raise OracleUnavailable("testnet pre-metadata statistic fixture is unavailable")
         except OracleUnavailable as error:
             raise unittest.SkipTest(str(error)) from error
         self.assertIs(attributes.get("published"), True)
-        self.assertGreater(
-            int(attributes["created_at"]),
-            int(global_rows[0]["created_at_unixtimestamp"]) * 1000,
-        )
-        self.assertEqual([], rows)
+        timestamps = [int(row["created_at_unixtimestamp"]) for row in rows]
+        self.assertGreater(int(attributes["created_at"]), max(timestamps) * 1000)
+        self.assertEqual(timestamps, sorted(timestamps))
+        self.assertEqual(len(timestamps), len(set(timestamps)))
 
 
 if __name__ == "__main__":

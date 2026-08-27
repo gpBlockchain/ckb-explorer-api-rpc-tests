@@ -15,13 +15,13 @@
 
 | 用例 | 场景 | 预期结果 | 防止的问题 | 优先级 |
 | --- | --- | --- | --- | --- |
-| `ROUTE-COTA-01` | 请求 `GET /api/v2/nft/cota/nft_classes` | 待确认：移动 Controller 或调整路由 Namespace；当前路由期待 `Api::V2::NFT::Cota::NFTClassesController#index`，但源码仅定义 `Api::V2::Cota::NFTClassesController#index`，已实现 Action 不可达 | CoTA Class 列表永久停在常量解析层 | P0 |
-| `ROUTE-COTA-02` | 请求 `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens` | 待确认：统一 Namespace 后到达 Tokens `index`；当前期待 `Api::V2::NFT::Cota::TokensController#index`，实际实现位于 `Api::V2::Cota::TokensController#index` | CoTA Token 列表被误报为空或通用路由错误 | P0 |
-| `ROUTE-COTA-03` | 请求 `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens/:id/claimed` | 待确认：统一 Namespace 后到达 Tokens `claimed`；当前期待 `Api::V2::NFT::Cota::TokensController#claimed`，实际 Action 位于少一层 `NFT` 的 Namespace | Token 领取状态接口因 Controller 常量错误不可达 | P0 |
-| `ROUTE-COTA-04` | 请求 `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens/:id/sender` | 待确认：统一 Namespace 后到达 Tokens `sender`；当前期待 `Api::V2::NFT::Cota::TokensController#sender`，实际 Action 位于 `Api::V2::Cota::TokensController` | Token 发送者查询在业务逻辑前失败 | P0 |
-| `ROUTE-COTA-05` | 请求 `GET /api/v2/nft/cota/transactions` | 待确认：统一 Namespace 后到达 `Api::V2::Cota::TransactionsController#index`；当前路由寻找不存在的 `Api::V2::NFT::Cota::TransactionsController` | CoTA 交易历史入口完全不可用 | P0 |
-| `ROUTE-COTA-06` | 请求 `GET /api/v2/nft/cota/issuers/:id` | 待确认：统一 Namespace 后到达 `Api::V2::Cota::IssuersController#show`；当前路由期待多一层 `NFT` 的缺失 Controller | Issuer 详情因命名空间漂移不可达 | P0 |
-| `ROUTE-COTA-07` | 请求 `GET /api/v2/nft/cota/issuers/:id/minted` | 待确认：统一 Namespace 后到达 `Api::V2::Cota::IssuersController#minted`；当前路由期待不存在的 `Api::V2::NFT::Cota::IssuersController` | Issuer 铸造记录在分发前失败 | P0 |
+| `ROUTE-COTA-01` | - [ ] 请求 `GET /api/v2/nft/cota/nft_classes` | 待确认：移动 Controller 或调整路由 Namespace；当前路由期待 `Api::V2::NFT::Cota::NFTClassesController#index`，但源码仅定义 `Api::V2::Cota::NFTClassesController#index`，已实现 Action 不可达 | CoTA Class 列表永久停在常量解析层 | P0 |
+| `ROUTE-COTA-02` | - [ ] 请求 `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens` | 待确认：统一 Namespace 后到达 Tokens `index`；当前期待 `Api::V2::NFT::Cota::TokensController#index`，实际实现位于 `Api::V2::Cota::TokensController#index` | CoTA Token 列表被误报为空或通用路由错误 | P0 |
+| `ROUTE-COTA-03` | - [ ] 请求 `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens/:id/claimed` | 待确认：统一 Namespace 后到达 Tokens `claimed`；当前期待 `Api::V2::NFT::Cota::TokensController#claimed`，实际 Action 位于少一层 `NFT` 的 Namespace | Token 领取状态接口因 Controller 常量错误不可达 | P0 |
+| `ROUTE-COTA-04` | - [ ] 请求 `GET /api/v2/nft/cota/nft_classes/:nft_class_id/tokens/:id/sender` | 待确认：统一 Namespace 后到达 Tokens `sender`；当前期待 `Api::V2::NFT::Cota::TokensController#sender`，实际 Action 位于 `Api::V2::Cota::TokensController` | Token 发送者查询在业务逻辑前失败 | P0 |
+| `ROUTE-COTA-05` | - [ ] 请求 `GET /api/v2/nft/cota/transactions` | 待确认：统一 Namespace 后到达 `Api::V2::Cota::TransactionsController#index`；当前路由寻找不存在的 `Api::V2::NFT::Cota::TransactionsController` | CoTA 交易历史入口完全不可用 | P0 |
+| `ROUTE-COTA-06` | - [ ] 请求 `GET /api/v2/nft/cota/issuers/:id` | 待确认：统一 Namespace 后到达 `Api::V2::Cota::IssuersController#show`；当前路由期待多一层 `NFT` 的缺失 Controller | Issuer 详情因命名空间漂移不可达 | P0 |
+| `ROUTE-COTA-07` | - [ ] 请求 `GET /api/v2/nft/cota/issuers/:id/minted` | 待确认：统一 Namespace 后到达 `Api::V2::Cota::IssuersController#minted`；当前路由期待不存在的 `Api::V2::NFT::Cota::IssuersController` | Issuer 铸造记录在分发前失败 | P0 |
 
 ## 本轮需要确认
 

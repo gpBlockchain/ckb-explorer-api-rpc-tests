@@ -22,5 +22,5 @@ description: Maintains concise CKB Explorer API RPC compatibility review cases a
 - Preserve the existing case ID when changing wording, expectation, or priority.
 - Mark unresolved expectations with `待确认：` and stop for review.
 - Do not edit automated tests for a new, deleted, or materially changed row until the user confirms it.
-- After confirmation, add the exact nearby comment `TEST-MAP: <CASE-ID>`.
-- Derive coverage with `python3 ../../scripts/check_test_map.py --root ../..`; do not persist coverage status in Markdown.
+- After confirmation, add the exact nearby comment `TEST-MAP: <CASE-ID>` and set that row's scenario checkbox to `- [x]`; use `- [ ]` when no mapping exists.
+- Derive coverage and validate checkbox consistency with `python3 ../../scripts/check_test_map.py --root ../..`; do not persist other coverage status in Markdown.

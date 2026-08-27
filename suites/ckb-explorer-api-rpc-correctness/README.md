@@ -16,11 +16,14 @@ Environment overrides:
 - `TESTNET_EXPLORER_API_URL`, `TESTNET_CKB_RPC_URL`
 - `RUN_LIVE_RPC_CORRECTNESS=0` disables live execution
 
+Transient transport failures, including read timeouts, HTTP 429 responses, and
+HTTP 5xx responses, are retried three times by default (four total attempts).
+
 ## Commands
 
 ```bash
 # Deterministic unit tests.
-PYTHONPATH=src python3 -m unittest tests.test_ckb tests.test_oracle tests.test_settings -v
+PYTHONPATH=src python3 -m unittest tests.test_ckb tests.test_http tests.test_oracle tests.test_settings -v
 
 # GET /api/v1/blocks RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_index -v
@@ -295,7 +298,7 @@ PYTHONPATH=src python3 -m unittest tests.statistics_discovery.test_v1_daily_stat
 # GET /api/v1/epoch_statistics/:id full-Epoch RPC formulas, limit ordering, maxima, and invalid-name correctness.
 PYTHONPATH=src python3 -m unittest tests.statistics_discovery.test_v1_epoch_statistics_show -v
 
-# GET /api/v1/market_data homepage/detail supply consistency and exact decimal format.
+# GET /api/v1/market_data homepage/detail independent supply snapshots and exact decimal format.
 PYTHONPATH=src python3 -m unittest tests.statistics_discovery.test_v1_market_data_index -v
 
 # GET /api/v1/market_data/:id supply formula branches, precision, and unknown-ID correctness.

@@ -17,7 +17,7 @@ class JsonHttpClient:
         self,
         *,
         timeout: float = 30,
-        retries: int = 1,
+        retries: int = 3,
         user_agent: str = "ckb-rpc-correctness/0.1.0",
         max_body_bytes: int = 20_000_000,
     ) -> None:

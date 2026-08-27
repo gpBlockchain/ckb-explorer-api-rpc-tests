@@ -21,7 +21,7 @@ The defaults include the common `/api` prefix; cases use paths beginning with `/
 - `scripts/`: inventory, generated-test, and live-fixture maintenance.
 - `skills/compatibility-test/`: suite-specific review and comparison rules.
 
-Review rows are the source of human-approved intent. After row confirmation, automated tests map back with exact nearby `TEST-MAP: <CASE-ID>` comments; mapping coverage is computed by the root checker.
+Review rows are the source of human-approved intent. Their scenario checkboxes show whether exact nearby `TEST-MAP: <CASE-ID>` comments exist; mapping coverage and checkbox consistency are computed by the root checker.
 
 ## Default Configuration
 
