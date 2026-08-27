@@ -16,7 +16,7 @@ Inherit repository-wide rules from `../../AGENTS.md`. This file contains only co
 1. Read the affected review document and inspect target source behavior, failures, dependencies, limits, existing tests, and observables.
 2. Add or revise self-contained rows while preserving existing case IDs and priorities unless behavior or impact changed.
 3. Present every new, deleted, or materially changed row and stop before editing mapped tests.
-4. After explicit human confirmation, synchronize tests with exact nearby `TEST-MAP: <CASE-ID>` comments.
+4. After explicit human confirmation, synchronize tests with exact nearby `TEST-MAP: <CASE-ID>` comments and mirror their presence in scenario checkboxes.
 5. After inventory changes, regenerate endpoint files and run `python3 scripts/generate_endpoint_tests.py --check`.
 6. Run the narrowest relevant tests and then `python3 ../../scripts/check_test_map.py --root ../..`.
 

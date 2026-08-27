@@ -15,9 +15,9 @@
 
 | 用例 | 场景 | 预期结果 | 防止的问题 | 优先级 |
 | --- | --- | --- | --- | --- |
-| `AREA-01` | 当[前置状态]，执行[操作] | [可直接观察的结果] | [用户或系统会遇到的具体问题] | P0 |
-| `AREA-02` | 当[边界或错误输入]，执行[操作] | [拒绝、回滚、恢复或状态保持] | [错误输入可能造成的具体问题] | P1 |
-| `AREA-03` | [尚未明确的场景] | 待确认：[需要 Reviewer 决定的结果] | [不确认会产生的行为歧义] | P1 |
+| `AREA-01` | - [ ] 当[前置状态]，执行[操作] | [可直接观察的结果] | [用户或系统会遇到的具体问题] | P0 |
+| `AREA-02` | - [ ] 当[边界或错误输入]，执行[操作] | [拒绝、回滚、恢复或状态保持] | [错误输入可能造成的具体问题] | P1 |
+| `AREA-03` | - [ ] [尚未明确的场景] | 待确认：[需要 Reviewer 决定的结果] | [不确认会产生的行为歧义] | P1 |
 
 ## 本轮需要确认
 
@@ -30,7 +30,8 @@ Authoring rules:
 - Keep one independently observable behavior per physical row.
 - Keep the row self-contained and use plain product language.
 - The case ID is the only Test Point ID; preserve it when editing the row.
-- Do not add approval, coverage, or automation statuses.
+- Start the scenario with `- [ ]`; change it to `- [x]` only when a matching `TEST-MAP` exists.
+- Do not add approval, coverage, or other automation statuses.
 - Do not include test paths or implementation details.
 - Present changed rows and stop for explicit review confirmation before generating test code.
 -->

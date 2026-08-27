@@ -18,11 +18,11 @@
 
 | 用例 | 场景 | 预期结果 | 防止的问题 | 优先级 |
 | --- | --- | --- | --- | --- |
-| `TX-LIST-RPC-01` | 在公开主网和测试网分别取得稳定的默认交易列表快照，并从同网络 RPC 规范链窗口推导最新普通交易集合 | API 恰好返回 RPC 可确认的最新 15 笔交易；`transaction_hash` 序列没有遗漏或重复，每笔 RPC `tx_status.status` 均为 `committed` 且 `tx_index > 0`，不会包含 Cellbase、待处理、提案中或已拒绝交易 | 最新交易漏同步、重复、混入 Cellbase 或非已提交交易，或长期返回陈旧集合 | P0 |
-| `TX-LIST-RPC-02` | 在公开主网和测试网分别选择同时覆盖跨区块交易和同一区块多笔普通交易的稳定列表快照 | API 交易按 RPC 所属区块 `header.timestamp` 降序排列；同一区块内按 RPC `tx_status.tx_index` 降序排列；来自不同区块且两个排序键都相同的交易不规定相对顺序 | 最新交易顺序反转、同区块交易按链上索引升序或数据库主键/哈希排序，导致时间线错乱 | P0 |
-| `TX-LIST-RPC-03` | 在公开主网和测试网分别对默认列表每笔交易调用 RPC `get_transaction` 并取得其所属区块 | 每行 `transaction_hash` 等于 RPC `transaction.hash`，`block_number` 等于 RPC `tx_status.block_number`，`block_timestamp` 等于所属 RPC 区块 `header.timestamp`，且 RPC 区块哈希与交易状态中的 `block_hash` 一致 | 交易哈希错位、交易关联到错误区块，或区块高度、时间戳进制及持久化值错误 | P0 |
-| `TX-LIST-RPC-04` | 在公开主网和测试网分别核对默认列表中的零变化交易和至少一笔非零变化普通交易 | 每行 `live_cell_changes` 等于对应 RPC 交易 `outputs` 数量减 `inputs` 数量；非零样本保持正负号，Cellbase 的特殊计数规则不会套用到普通交易 | 输入输出漏计、正负号反转、错误加上 Cellbase 基数或所有交易固定显示为零 | P1 |
-| `TX-LIST-RPC-05` | 在公开主网和测试网分别对默认列表中含一个及多个普通输入的交易解析全部 RPC 输入引用 | 每行 `capacity_involved` 等于全部输入引用的上一笔交易对应输出 `capacity` 的 Shannon 整数总和，每个输入按其 `previous_output.index` 恰好计入一次 | 输入引用解析错误、容量遗漏或重复、输出索引错位及大整数精度损失 | P0 |
+| `TX-LIST-RPC-01` | - [x] 在公开主网和测试网分别取得稳定的默认交易列表快照，并从同网络 RPC 规范链窗口推导最新普通交易集合 | API 恰好返回 RPC 可确认的最新 15 笔交易；`transaction_hash` 序列没有遗漏或重复，每笔 RPC `tx_status.status` 均为 `committed` 且 `tx_index > 0`，不会包含 Cellbase、待处理、提案中或已拒绝交易 | 最新交易漏同步、重复、混入 Cellbase 或非已提交交易，或长期返回陈旧集合 | P0 |
+| `TX-LIST-RPC-02` | - [x] 在公开主网和测试网分别选择同时覆盖跨区块交易和同一区块多笔普通交易的稳定列表快照 | API 交易按 RPC 所属区块 `header.timestamp` 降序排列；同一区块内按 RPC `tx_status.tx_index` 降序排列；来自不同区块且两个排序键都相同的交易不规定相对顺序 | 最新交易顺序反转、同区块交易按链上索引升序或数据库主键/哈希排序，导致时间线错乱 | P0 |
+| `TX-LIST-RPC-03` | - [x] 在公开主网和测试网分别对默认列表每笔交易调用 RPC `get_transaction` 并取得其所属区块 | 每行 `transaction_hash` 等于 RPC `transaction.hash`，`block_number` 等于 RPC `tx_status.block_number`，`block_timestamp` 等于所属 RPC 区块 `header.timestamp`，且 RPC 区块哈希与交易状态中的 `block_hash` 一致 | 交易哈希错位、交易关联到错误区块，或区块高度、时间戳进制及持久化值错误 | P0 |
+| `TX-LIST-RPC-04` | - [x] 在公开主网和测试网分别核对默认列表中的零变化交易和至少一笔非零变化普通交易 | 每行 `live_cell_changes` 等于对应 RPC 交易 `outputs` 数量减 `inputs` 数量；非零样本保持正负号，Cellbase 的特殊计数规则不会套用到普通交易 | 输入输出漏计、正负号反转、错误加上 Cellbase 基数或所有交易固定显示为零 | P1 |
+| `TX-LIST-RPC-05` | - [x] 在公开主网和测试网分别对默认列表中含一个及多个普通输入的交易解析全部 RPC 输入引用 | 每行 `capacity_involved` 等于全部输入引用的上一笔交易对应输出 `capacity` 的 Shannon 整数总和，每个输入按其 `previous_output.index` 恰好计入一次 | 输入引用解析错误、容量遗漏或重复、输出索引错位及大整数精度损失 | P0 |
 
 ## 本轮需要确认
 
