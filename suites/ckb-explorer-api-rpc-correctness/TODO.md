@@ -164,7 +164,7 @@
 - [x] `GET /api/v1/contract_transactions/download_csv` — 导出合约交易 CSV
 - [x] `GET /api/v1/contracts/:id` — 合约详情
 - [x] `GET /api/v2/scripts` — 脚本列表
-- [x] `GET /api/v2/scripts/ckb_transactions` — 脚本关联交易
+- [x] `GET /api/v2/scripts/ckb_transactions` — 脚本关联交易（已记录 expectedFailure：主网 Data Hash 查询包含未注解所选脚本身份的交易）
 - [x] `GET /api/v2/scripts/deployed_cells` — 脚本部署 Cells
 - [x] `GET /api/v2/scripts/referring_cells` — 脚本引用 Cells
 - [x] `GET /api/v2/scripts/general_info` — 脚本通用信息

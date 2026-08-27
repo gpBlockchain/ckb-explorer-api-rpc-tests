@@ -227,7 +227,6 @@ class V1ContractsShowRpcCorrectnessTests(unittest.TestCase):
                 raise unittest.SkipTest(f"{network.name} public daily average_deposit_time anchor is unavailable")
 
     # TEST-MAP: DAO-STATE-RPC-07
-    @unittest.expectedFailure  # The five-minute contract cache can lag the RPC-backed Explorer tip fraction.
     def test_estimated_apc_matches_fractional_epoch_issuance_formula_truncated_to_four_places(self) -> None:
         for network in self.settings.networks:
             with self.subTest(network=network.name):

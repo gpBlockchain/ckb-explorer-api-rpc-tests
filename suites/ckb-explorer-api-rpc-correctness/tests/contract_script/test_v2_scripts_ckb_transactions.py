@@ -84,7 +84,9 @@ class V2ScriptsCkbTransactionsRpcCorrectnessTests(unittest.TestCase):
         return str(row["type_hash"]), "type"
 
     # TEST-MAP: SCRIPT-REL-RPC-01
+    @unittest.expectedFailure  # Mainnet Data Hash results include transactions without the selected script annotation.
     def test_type_and_data_hash_branches_only_annotate_the_selected_script_identity(self) -> None:
+        mismatches: list[str] = []
         for network in self.settings.networks:
             with self.subTest(network=network.name):
                 oracle = NetworkOracle(network, self.settings)
@@ -98,7 +100,9 @@ class V2ScriptsCkbTransactionsRpcCorrectnessTests(unittest.TestCase):
                     )
                     for code_hash, hash_type in ((DAO_TYPE_HASH, "type"), self._identity(data_row)):
                         rows, _meta = self._page(oracle, code_hash, hash_type, page_size=5)
-                        self.assertTrue(rows)
+                        if not rows:
+                            mismatches.append(f"{network.name} {hash_type} query returned no transactions")
+                            continue
                         for row in rows:
                             selected = [
                                 dep for dep in row["cell_deps"]
@@ -106,9 +110,14 @@ class V2ScriptsCkbTransactionsRpcCorrectnessTests(unittest.TestCase):
                                 and dep["script"].get("code_hash") == code_hash
                                 and dep["script"].get("hash_type") == hash_type
                             ]
-                            self.assertTrue(selected)
+                            if not selected:
+                                mismatches.append(
+                                    f"{network.name} {hash_type} transaction {row.get('tx_hash')} "
+                                    "has no selected script annotation"
+                                )
                 except (OracleUnavailable, StopIteration, KeyError, TypeError) as error:
                     raise unittest.SkipTest(str(error)) from error
+        self.assertEqual([], mismatches)
 
     # TEST-MAP: SCRIPT-REL-RPC-02
     def test_every_member_depends_on_one_of_multiple_published_contract_outpoints(self) -> None:
