@@ -1,7 +1,7 @@
 {
   "run_live": true,
   "timeout_seconds": 30,
-  "transport_retries": 1,
+  "transport_retries": 3,
   "max_lag_blocks": 5,
   "proposal_window": 10,
   "list_page_size": 100,

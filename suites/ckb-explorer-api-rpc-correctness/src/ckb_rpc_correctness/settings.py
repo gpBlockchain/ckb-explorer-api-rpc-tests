@@ -69,7 +69,7 @@ def load_settings(
 
     run_live = _boolean(env.get("RUN_LIVE_RPC_CORRECTNESS", payload.get("run_live", True)), field="run_live")
     timeout_seconds = float(payload.get("timeout_seconds", 30))
-    retries = int(payload.get("transport_retries", 1))
+    retries = int(payload.get("transport_retries", 3))
     max_lag = int(payload.get("max_lag_blocks", 5))
     proposal_window = int(payload.get("proposal_window", 10))
     page_size = int(payload.get("list_page_size", 100))

@@ -16,11 +16,14 @@ Environment overrides:
 - `TESTNET_EXPLORER_API_URL`, `TESTNET_CKB_RPC_URL`
 - `RUN_LIVE_RPC_CORRECTNESS=0` disables live execution
 
+Transient transport failures, including read timeouts, HTTP 429 responses, and
+HTTP 5xx responses, are retried three times by default (four total attempts).
+
 ## Commands
 
 ```bash
 # Deterministic unit tests.
-PYTHONPATH=src python3 -m unittest tests.test_ckb tests.test_oracle tests.test_settings -v
+PYTHONPATH=src python3 -m unittest tests.test_ckb tests.test_http tests.test_oracle tests.test_settings -v
 
 # GET /api/v1/blocks RPC correctness against both public networks.
 PYTHONPATH=src python3 -m unittest tests.chain_data.test_v1_blocks_index -v
