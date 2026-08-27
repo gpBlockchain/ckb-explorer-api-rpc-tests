@@ -298,7 +298,7 @@ PYTHONPATH=src python3 -m unittest tests.statistics_discovery.test_v1_daily_stat
 # GET /api/v1/epoch_statistics/:id full-Epoch RPC formulas, limit ordering, maxima, and invalid-name correctness.
 PYTHONPATH=src python3 -m unittest tests.statistics_discovery.test_v1_epoch_statistics_show -v
 
-# GET /api/v1/market_data homepage/detail supply consistency and exact decimal format.
+# GET /api/v1/market_data homepage/detail independent supply snapshots and exact decimal format.
 PYTHONPATH=src python3 -m unittest tests.statistics_discovery.test_v1_market_data_index -v
 
 # GET /api/v1/market_data/:id supply formula branches, precision, and unknown-ID correctness.

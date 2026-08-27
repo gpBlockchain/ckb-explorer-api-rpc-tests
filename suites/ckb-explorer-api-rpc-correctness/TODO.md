@@ -233,7 +233,7 @@
 - [x] `GET /api/v1/daily_statistics/:id` — 每日统计（公开 RPC/Indexer 不提供封闭日历史状态与缓存版本控制，相应复算子测试按网络标记 oracle unavailable）
 - [ ] `GET /api/v1/block_statistics/:id` — 区块统计（阻塞：唯一评审行 `HIST-STATS-RPC-08` 含待确认，源码标注 unused）
 - [x] `GET /api/v1/epoch_statistics/:id` — Epoch 统计
-- [x] `GET /api/v1/market_data` — 市场数据列表（已记录首页与详情独立缓存导致 Circulating Supply 分叉的 expectedFailure）
+- [x] `GET /api/v1/market_data` — 市场数据列表（首页与详情按 URL 独立缓存，自动化验证各自供给快照格式且不要求跨 URL 完全一致）
 - [x] `GET /api/v1/market_data/:id` — 市场数据详情（公开环境无历史释放边界、未生成 DAO 利息聚合与原子漏洞奖励余额快照，相应子测试按网络标记 oracle unavailable）
 - [x] `GET /api/v1/distribution_data/:id` — 分布数据（90 日测试网公开查询超时，完整 7/90 日 RPC 窗口按网络标记 oracle unavailable；未实现 Checkpoint 行保持待确认未自动化）
 - [x] `GET /api/v1/monetary_data/:id` — 货币数据（已记录 Real Inflation 使用未截断内部序列、与返回序列相减语义相差 `1e-8` 的 expectedFailure；年数边界待确认行未自动化）
