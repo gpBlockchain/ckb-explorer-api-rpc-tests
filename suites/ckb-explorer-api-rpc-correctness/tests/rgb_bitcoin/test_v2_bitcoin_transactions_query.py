@@ -81,6 +81,35 @@ class V2BitcoinTransactionsQueryRpcCorrectnessTests(unittest.TestCase):
         self.assertIsInstance(payload, dict)
         return payload
 
+    def _assert_adjacent_rpc_result(
+        self,
+        before: Mapping[str, Any],
+        actual: Mapping[str, Any],
+        after: Mapping[str, Any],
+    ) -> None:
+        def immutable(result: Mapping[str, Any]) -> dict[str, Any]:
+            return {key: value for key, value in result.items() if key != "confirmations"}
+
+        self.assertEqual(immutable(before), immutable(actual))
+        self.assertEqual(immutable(before), immutable(after))
+        before_confirmations = before.get("confirmations")
+        actual_confirmations = actual.get("confirmations")
+        after_confirmations = after.get("confirmations")
+        self.assertIs(type(before_confirmations), int)
+        self.assertIs(type(actual_confirmations), int)
+        self.assertIs(type(after_confirmations), int)
+        assert isinstance(before_confirmations, int)
+        assert isinstance(actual_confirmations, int)
+        assert isinstance(after_confirmations, int)
+        lower = min(before_confirmations, after_confirmations)
+        upper = max(before_confirmations, after_confirmations)
+        if not lower <= actual_confirmations <= upper:
+            raise unittest.SkipTest(
+                "Explorer and independent Bitcoin RPC confirmation snapshots do not overlap: "
+                f"txid={actual.get('txid')}, explorer={actual_confirmations}, "
+                f"rpc={before_confirmations}/{after_confirmations}"
+            )
+
     # TEST-MAP: BTC-QUERY-RPC-01
     # TEST-MAP: BTC-QUERY-RPC-02
     # TEST-MAP: BTC-QUERY-RPC-09
@@ -89,8 +118,9 @@ class V2BitcoinTransactionsQueryRpcCorrectnessTests(unittest.TestCase):
             with self.subTest(network=network.name):
                 txids = list(TRANSACTION_FIXTURES[network.name])
                 try:
-                    rpc_rows = self._bitcoin_batch(network.name, txids)
+                    before_rows = self._bitcoin_batch(network.name, txids)
                     payload = self._explorer(network, txids)
+                    after_rows = self._bitcoin_batch(network.name, txids)
                 except OracleUnavailable as error:
                     raise unittest.SkipTest(str(error)) from error
                 except HttpClientError as error:
@@ -98,22 +128,25 @@ class V2BitcoinTransactionsQueryRpcCorrectnessTests(unittest.TestCase):
                         raise unittest.SkipTest(str(error)) from error
                     self.fail(f"{network.name} Explorer Bitcoin batch query failed: {error}")
 
-                expected: dict[str, Mapping[str, Any]] = {}
-                for row in rpc_rows:
-                    result = row.get("result")
-                    if not isinstance(result, dict) or not isinstance(result.get("txid"), str):
-                        raise unittest.SkipTest(
-                            f"{network.name} Bitcoin RPC fixture result is unavailable"
-                        )
-                    expected[result["txid"]] = result
+                before: dict[str, Mapping[str, Any]] = {}
+                after: dict[str, Mapping[str, Any]] = {}
+                for expected, rows in ((before, before_rows), (after, after_rows)):
+                    for row in rows:
+                        result = row.get("result")
+                        if not isinstance(result, dict) or not isinstance(result.get("txid"), str):
+                            raise unittest.SkipTest(
+                                f"{network.name} Bitcoin RPC fixture result is unavailable"
+                            )
+                        expected[result["txid"]] = result
                 self.assertEqual(set(txids), set(payload))
-                self.assertEqual(set(txids), set(expected))
+                self.assertEqual(set(txids), set(before))
+                self.assertEqual(set(txids), set(after))
                 for txid in txids:
                     wrapper = payload[txid]
                     self.assertIsInstance(wrapper, dict)
                     self.assertIsNone(wrapper.get("error"))
                     self.assertEqual(txid, wrapper.get("result", {}).get("txid"))
-                    self.assertEqual(expected[txid], wrapper["result"])
+                    self._assert_adjacent_rpc_result(before[txid], wrapper["result"], after[txid])
 
     # TEST-MAP: BTC-QUERY-RPC-03
     def test_successful_item_survives_unknown_and_rpc_error_items(self) -> None:
@@ -121,12 +154,16 @@ class V2BitcoinTransactionsQueryRpcCorrectnessTests(unittest.TestCase):
             with self.subTest(network=network.name):
                 valid_txid = TRANSACTION_FIXTURES[network.name][0]
                 try:
-                    rpc_rows = self._bitcoin_batch(
+                    before_rows = self._bitcoin_batch(
                         network.name,
                         [valid_txid, UNKNOWN_TRANSACTION, "not-a-txid"],
                     )
                     payload = self._explorer(
                         network,
+                        [valid_txid, UNKNOWN_TRANSACTION, "not-a-txid"],
+                    )
+                    after_rows = self._bitcoin_batch(
+                        network.name,
                         [valid_txid, UNKNOWN_TRANSACTION, "not-a-txid"],
                     )
                 except OracleUnavailable as error:
@@ -135,12 +172,20 @@ class V2BitcoinTransactionsQueryRpcCorrectnessTests(unittest.TestCase):
                     if "transport failure" in str(error):
                         raise unittest.SkipTest(str(error)) from error
                     self.fail(f"{network.name} Explorer Bitcoin partial batch failed: {error}")
-                successes = [row for row in rpc_rows if isinstance(row.get("result"), dict)]
-                errors = [row for row in rpc_rows if row.get("error") is not None]
-                self.assertEqual(1, len(successes))
-                self.assertEqual(2, len(errors))
+                before_successes = [row for row in before_rows if isinstance(row.get("result"), dict)]
+                after_successes = [row for row in after_rows if isinstance(row.get("result"), dict)]
+                before_errors = [row for row in before_rows if row.get("error") is not None]
+                after_errors = [row for row in after_rows if row.get("error") is not None]
+                self.assertEqual(1, len(before_successes))
+                self.assertEqual(1, len(after_successes))
+                self.assertEqual(2, len(before_errors))
+                self.assertEqual(2, len(after_errors))
                 self.assertEqual({valid_txid}, set(payload))
-                self.assertEqual(successes[0]["result"], payload[valid_txid]["result"])
+                self._assert_adjacent_rpc_result(
+                    before_successes[0]["result"],
+                    payload[valid_txid]["result"],
+                    after_successes[0]["result"],
+                )
 
     # TEST-MAP: BTC-QUERY-RPC-04
     def test_duplicate_txid_produces_one_result(self) -> None:

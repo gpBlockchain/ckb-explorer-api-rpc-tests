@@ -458,7 +458,11 @@ class NetworkOracle:
         return self._economic_states[block_hash]
 
     def reward_sample(self) -> tuple[BlockSample, Mapping[str, Any]]:
-        sample = self.confirmed_sample()
+        sample = self._find_sample(
+            "reward",
+            lambda attributes, _block: self.detail_attributes(int(attributes["number"])).get("reward_status")
+            == "issued",
+        )
         header = sample.rpc_block.get("header")
         block_hash = header.get("hash") if isinstance(header, dict) else None
         if not isinstance(block_hash, str):
